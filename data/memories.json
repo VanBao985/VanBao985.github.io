@@ -1,0 +1,10 @@
+{
+  "albums": [
+    { "id": "nam-nhat", "name": "Năm nhất", "order": 1 },
+    { "id": "nam-hai", "name": "Năm hai", "order": 2 },
+    { "id": "nam-ba", "name": "Năm ba", "order": 3 },
+    { "id": "nam-cuoi", "name": "Năm cuối", "order": 4 },
+    { "id": "tot-nghiep", "name": "Tốt nghiệp", "order": 5 }
+  ],
+  "photos": []
+}

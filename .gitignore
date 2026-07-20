@@ -1,0 +1,12 @@
+# Worktree tam cua Claude Code
+.claude/worktrees/
+
+# He dieu hanh
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/
+.idea/
+*.swp

@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add *)",
+      "Bash(git commit -q -m 'feat: website luu giu ki niem dai hoc *)"
+    ]
+  }
+}
