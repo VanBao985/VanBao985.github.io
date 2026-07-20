@@ -10,3 +10,6 @@ desktop.ini
 .vscode/
 .idea/
 *.swp
+
+# Cau hinh cuc bo cua Claude Code
+.claude/settings.local.json
