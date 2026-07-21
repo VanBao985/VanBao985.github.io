@@ -4,63 +4,62 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-A photo-memory site ("College Memories") hosted on GitHub Pages. It is a **single-page React 18 + Vite app** with client-side routing (react-router v6) — the public gallery *and* the authenticated admin panel are routes in the same app. All UI text, code comments, and commit messages are in **English**.
+A photo-gallery site ("College Memories") hosted on GitHub Pages. It is a **single-page React 18 + Vite app** with client-side routing (react-router v6). Photos are **not stored in this repo** — they live in public Google Drive folders and are listed into a static JSON file at build time. All UI text, code comments, and commit messages are in **English**.
 
 ## Commands
 
 ```bash
-npm install       # once
-npm run dev       # Vite dev server on :5173
-npm run build     # production build into dist/
-npm run preview   # serve the built dist/ locally on :4173
+npm install        # once
+npm run dev        # Vite dev server on :5173
+npm run sync:drive # refresh public/data/drive-photos.json from Drive
+npm run build      # sync:drive, then production build into dist/
+npm run preview    # serve the built dist/ locally on :4173
 ```
 
 There is no lint or test tooling.
 
 ## Architecture
 
-The site is serverless. GitHub itself is the backend — the repo *is* the database and CDN.
-
-There is exactly **one HTML entry** (`index.html` → `src/main.jsx` → `src/App.jsx`). Routes are resolved on the client, not by file paths:
+There is exactly **one HTML entry** (`index.html` → `src/main.jsx` → `src/App.jsx`). Routes resolve on the client:
 
 | Route | Component | Notes |
 |---|---|---|
-| `/dashboard` | `src/pages/Gallery.jsx` | public; filtering, search, lightbox state lives here |
-| `/login` | `src/pages/Login.jsx` | PAT entry; redirects to `/admin` when already signed in |
-| `/admin` | `src/pages/Admin.jsx` | protected by `src/components/RequireAuth.jsx` |
-| `*` | `src/pages/NotFound.jsx` | catch-all 404 screen |
+| `/dashboard` | `src/pages/Gallery.jsx` | the gallery — folder filter + carousel state lives here |
+| `*` | `src/pages/NotFound.jsx` | **currently commented out in `App.jsx`** (see below) |
 
-**`/` is intentionally not a route.** The gallery lives at `/dashboard`, so the
-bare root falls through to the catch-all and renders the 404 screen. When
-adding links, point at `/dashboard` — never `/`, and never make the catch-all
-redirect to `/` (that would loop forever against itself).
+**`/` is intentionally not a route.** The gallery lives at `/dashboard`. Note the catch-all is presently commented out, so `/` and unknown paths render a *blank page* rather than the 404 screen; uncommenting the one line in `App.jsx` restores it. Never point the catch-all at `/` — it would redirect to itself forever.
 
-- **Layout** (`src/components/Layout.jsx`): renders `Header` / `<Outlet/>` / `Footer` around every route.
-- **Achievements** (`src/components/Achievements.jsx` + `StatCounter.jsx`): animated count-up stats band at the top of the gallery. Data is configured in `src/data/achievements.js` — add entries there, no component changes needed.
-- **Auth** (`src/context/AuthContext.jsx`): reactive mirror of the token in `localStorage` so the UI re-renders on sign in/out. `github.js` remains the source of truth for requests.
-- **Admin** (`src/pages/Admin.jsx`): authenticated write UI. The user pastes a GitHub fine-grained PAT (stored only in `localStorage`, never committed). Uploads/deletes are performed as **direct commits via the GitHub Contents REST API**.
-- **Storage adapter** (`src/lib/github.js`): the *only* module that talks to GitHub. Everything reads/writes through `getFile` / `putFile` / `deleteFile` / `loadDatabase` / `saveDatabase`. To swap backends, reimplement this module's interface.
-- **Image helpers** (`src/lib/images.js`): `compress` / `slugify` / `formatBytes`, kept framework-agnostic.
+- **Layout** (`src/components/Layout.jsx`): `Header` / `<Outlet/>` / `Footer` around every route.
+- **Achievements** (`src/components/Achievements.jsx` + `StatCounter.jsx`): animated count-up band. Configure in `src/data/achievements.js` — no component changes needed.
+- **Carousel** (`src/components/PhotoCarousel.jsx`): the photo viewer — prev/next buttons, arrow keys, neighbour preloading, thumbnail strip.
+- **Hero** (`src/components/Hero.jsx`): total photo count plus the folder filter chips (chips only render when more than one folder is configured).
 
-`public/data/memories.json` is the single source of truth: `{ albums: [...], photos: [...] }`. Schema is documented in `README.md`. Photos are sorted by `date` descending; `width`/`height` are stored per-photo so the gallery can set `aspect-ratio` up front and avoid layout shift (CLS).
+## Google Drive as the photo source
 
-### URL path vs repo path
+`src/data/drive-folders.js` is the config: a list of `{ id, name }` for public Drive folders. Adding a folder there is the *only* step needed to add a section to the gallery.
 
-Served files live under `public/` in the repo but are deployed at the site root. Photo `src` values in `memories.json` are **URL paths** (`images/...`); when the admin panel talks to the GitHub API it maps them to repo paths with `repoPath()` from `github.js` (`public/images/...`). Preserve this split when touching upload/delete code.
+`scripts/fetch-drive-photos.mjs` runs at build time and writes `public/data/drive-photos.json` as `{ syncedAt, folders: [{ id, name, photos: [{ id, name }] }] }`. The gallery fetches that JSON — visitors never talk to Google.
 
-## Key mechanics to preserve
+Things to preserve:
 
-- **SPA fallback**: GitHub Pages has no rewrite rule, so a deep link like `/admin` would 404. The `spaFallback` plugin in `vite.config.js` copies `dist/index.html` → `dist/404.html` at build time; Pages serves that on unknown paths and the router takes over. Do not remove it, and do not hand-write `public/404.html` — it must carry the hashed asset names Vite injects.
-- **Asset paths**: use `assetUrl()` from `src/lib/assets.js` for anything fetched from `public/` (data JSON, photo `src`). Bare relative paths break on nested routes.
-- **UTF-8 base64**: the Contents API is base64, and browser `btoa` only handles Latin-1. Non-ASCII text goes through `utf8ToBase64` / `base64ToUtf8` in `github.js` — do not replace these with raw `btoa`/`atob`.
-- **Optimistic concurrency**: writes must send the file's current `sha`; a stale sha returns 409/422. `saveDatabase` re-reads and retries once on conflict. Preserve this when touching write paths.
-- **Upload flow** (`src/pages/Admin.jsx`): each image is compressed on-canvas, then committed as its own commit; `memories.json` is committed **once** at the end. Each commit triggers a Pages deploy, so avoid changing this into one-commit-per-field or bulk rapid commits.
-- **Cache-busting**: the gallery fetches `memories.json?t=<timestamp>` with `cache: 'no-store'` so freshly uploaded photos appear without waiting on GitHub Pages' long `Cache-Control`.
-- **XSS**: React escapes rendered text by default — never introduce `dangerouslySetInnerHTML` for user data. (The old vanilla `esc()` helper is gone along with the vanilla admin; it is no longer needed.)
-- **Object URLs**: queued upload previews use `URL.createObjectURL`; they are revoked on removal, on clear, and on unmount. Keep that cleanup when editing the queue.
-- Image compression is tuned via the `COMPRESS` constant in `src/lib/images.js` (`maxDimension`, `quality`, `skipUnder`).
+- **Why build-time and not client-side**: Google's `embeddedfolderview` endpoint sends **no CORS header**, so a browser `fetch` of it is blocked. Node has no such restriction. Do not try to move this listing into the React app.
+- **Image URLs**: `https://drive.google.com/thumbnail?id=<id>&sz=w<width>` via `driveImageUrl()` in `src/lib/drive.js`. The `lh3.googleusercontent.com/d/<id>` form was tested against these folders and **fails** — do not "simplify" to it.
+- **Both Drive endpoints are undocumented.** They work today and can break without notice; that is the first thing to check if photos vanish.
+- **Folders must stay shared as "Anyone with the link"**, or images 404 for visitors.
+- **Subfolders are ignored** by the sync script on purpose. To include one, list it explicitly in `drive-folders.js`.
+- New photos in Drive **do not appear until a rebuild** — the listing is frozen at build time. Re-run the deploy workflow to refresh.
+- Drive gives us only file names, no dates/albums/descriptions. Any richer metadata needs a separate mapping file.
+
+## Other mechanics to preserve
+
+- **SPA fallback**: GitHub Pages has no rewrite rule, so a deep link like `/dashboard` would 404. The `spaFallback` plugin in `vite.config.js` copies `dist/index.html` → `dist/404.html` at build time. Do not remove it, and do not hand-write `public/404.html` — it must carry the hashed asset names Vite injects.
+- **HTTP status is inverted**: `/dashboard` is served via `404.html` so it returns a 404 status with correct content, while `/` returns 200 with the not-found screen. This is inherent to static Pages hosting, not a bug.
+- **Asset paths**: use `assetUrl()` from `src/lib/assets.js` for anything under `public/`. Bare relative paths break on nested routes.
+- **Carousel reset**: `Gallery.jsx` passes `key={activeFolder}` to `PhotoCarousel` so switching folders remounts it and resets to photo 1. Without this, the index could point past the end of a smaller folder.
+- **Cache-busting**: the gallery fetches `drive-photos.json?t=<timestamp>` with `cache: 'no-store'` so a fresh deploy shows new photos without waiting on GitHub Pages' long `Cache-Control`.
+- **XSS**: React escapes rendered text by default — never introduce `dangerouslySetInnerHTML` for Drive-supplied file names.
 - `public/.nojekyll` is copied into `dist/` by Vite; keep it so Pages serves files verbatim.
 
 ## Deployment
 
-Push to `main`. `.github/workflows/deploy.yml` builds with Vite and deploys `dist/` via `actions/deploy-pages`. The repo's Pages source must be set to **GitHub Actions** (Settings → Pages). Admin uploads commit straight to `main`, which re-triggers the workflow (~1–2 min until photos appear).
+Push to `main`. `.github/workflows/deploy.yml` runs `npm ci` + `npm run build` (which syncs Drive first) and deploys `dist/` via `actions/deploy-pages`. The repo's Pages source must be set to **GitHub Actions** (Settings → Pages). The live gallery is at `/dashboard`, not the bare domain.

@@ -7,9 +7,9 @@
 //   note:     optional extra line of context
 export const ACHIEVEMENTS = [
   {
-    value: 250,
+    value: 240,
     decimals: 0,
-    unit: 'M VND',
+    unit: 'M',
     label: 'Scholarships Awarded',
     note: 'Merit-based, across four years',
   },

@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "sync:drive": "node scripts/fetch-drive-photos.mjs",
+    "build": "npm run sync:drive && vite build",
     "preview": "vite preview"
   },
   "dependencies": {

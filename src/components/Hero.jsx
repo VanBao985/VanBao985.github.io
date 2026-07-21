@@ -1,11 +1,4 @@
-export default function Hero({ photos, albums }) {
-  const years = photos
-    .map((p) => new Date(p.date).getFullYear())
-    .filter((y) => !Number.isNaN(y));
-  const lo = years.length ? Math.min(...years) : null;
-  const hi = years.length ? Math.max(...years) : null;
-  const span = lo === null ? '—' : lo === hi ? String(lo) : `${lo}–${hi}`;
-
+export default function Hero({ total = 0, folders = [], activeFolder, onFolderChange }) {
   return (
     <section className="wrap hero">
       <p className="hero__eyebrow">A personal collection</p>
@@ -16,20 +9,37 @@ export default function Hero({ photos, albums }) {
         Four years of lecture halls, spontaneous trips, deadline nights and
         friends — gathered here before the memories fade.
       </p>
-      {photos.length > 0 && (
+
+      {total > 0 && (
         <div className="hero__stats">
           <div className="stat">
-            <span className="stat__num">{photos.length}</span>
+            <span className="stat__num">{total}</span>
             <span className="stat__label">Moments</span>
           </div>
-          <div className="stat">
-            <span className="stat__num">{albums.length}</span>
-            <span className="stat__label">Albums</span>
-          </div>
-          <div className="stat">
-            <span className="stat__num">{span}</span>
-            <span className="stat__label">Time span</span>
-          </div>
+
+          {/* Only worth showing chips once there is more than one folder */}
+          {folders.length > 1 && (
+            <div className="chips hero__folders" role="group" aria-label="Filter by folder">
+              <button
+                className="chip"
+                aria-pressed={activeFolder === 'all'}
+                onClick={() => onFolderChange('all')}
+              >
+                All<span className="chip__count">{total}</span>
+              </button>
+              {folders.map((folder) => (
+                <button
+                  key={folder.id}
+                  className="chip"
+                  aria-pressed={activeFolder === folder.id}
+                  onClick={() => onFolderChange(folder.id)}
+                >
+                  {folder.name}
+                  <span className="chip__count">{folder.photos.length}</span>
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       )}
     </section>
