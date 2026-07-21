@@ -24,10 +24,10 @@ There is exactly **one HTML entry** (`index.html` → `src/main.jsx` → `src/Ap
 
 | Route | Component | Notes |
 |---|---|---|
-| `/dashboard` | `src/pages/Gallery.jsx` | the gallery — folder filter + carousel state lives here |
+| `/gallery` | `src/pages/Gallery.jsx` | the gallery — folder filter + carousel state lives here |
 | `*` | `src/pages/NotFound.jsx` | **currently commented out in `App.jsx`** (see below) |
 
-**`/` is intentionally not a route.** The gallery lives at `/dashboard`. Note the catch-all is presently commented out, so `/` and unknown paths render a *blank page* rather than the 404 screen; uncommenting the one line in `App.jsx` restores it. Never point the catch-all at `/` — it would redirect to itself forever.
+**`/` is intentionally not a route.** The gallery lives at `/gallery`. Note the catch-all is presently commented out, so `/` and unknown paths render a *blank page* rather than the 404 screen; uncommenting the one line in `App.jsx` restores it. Never point the catch-all at `/` — it would redirect to itself forever.
 
 - **Layout** (`src/components/Layout.jsx`): `Header` / `<Outlet/>` / `Footer` around every route.
 - **Achievements** (`src/components/Achievements.jsx` + `StatCounter.jsx`): animated count-up band. Configure in `src/data/achievements.js` — no component changes needed.
@@ -52,8 +52,8 @@ Things to preserve:
 
 ## Other mechanics to preserve
 
-- **SPA fallback**: GitHub Pages has no rewrite rule, so a deep link like `/dashboard` would 404. The `spaFallback` plugin in `vite.config.js` copies `dist/index.html` → `dist/404.html` at build time. Do not remove it, and do not hand-write `public/404.html` — it must carry the hashed asset names Vite injects.
-- **HTTP status is inverted**: `/dashboard` is served via `404.html` so it returns a 404 status with correct content, while `/` returns 200 with the not-found screen. This is inherent to static Pages hosting, not a bug.
+- **SPA fallback**: GitHub Pages has no rewrite rule, so a deep link like `/gallery` would 404. The `spaFallback` plugin in `vite.config.js` copies `dist/index.html` → `dist/404.html` at build time. Do not remove it, and do not hand-write `public/404.html` — it must carry the hashed asset names Vite injects.
+- **HTTP status is inverted**: `/gallery` is served via `404.html` so it returns a 404 status with correct content, while `/` returns 200 with the not-found screen. This is inherent to static Pages hosting, not a bug.
 - **Asset paths**: use `assetUrl()` from `src/lib/assets.js` for anything under `public/`. Bare relative paths break on nested routes.
 - **Carousel reset**: `Gallery.jsx` passes `key={activeFolder}` to `PhotoCarousel` so switching folders remounts it and resets to photo 1. Without this, the index could point past the end of a smaller folder.
 - **Cache-busting**: the gallery fetches `drive-photos.json?t=<timestamp>` with `cache: 'no-store'` so a fresh deploy shows new photos without waiting on GitHub Pages' long `Cache-Control`.
@@ -62,4 +62,4 @@ Things to preserve:
 
 ## Deployment
 
-Push to `main`. `.github/workflows/deploy.yml` runs `npm ci` + `npm run build` (which syncs Drive first) and deploys `dist/` via `actions/deploy-pages`. The repo's Pages source must be set to **GitHub Actions** (Settings → Pages). The live gallery is at `/dashboard`, not the bare domain.
+Push to `main`. `.github/workflows/deploy.yml` runs `npm ci` + `npm run build` (which syncs Drive first) and deploys `dist/` via `actions/deploy-pages`. The repo's Pages source must be set to **GitHub Actions** (Settings → Pages). The live gallery is at `/gallery`, not the bare domain.

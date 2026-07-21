@@ -6,8 +6,8 @@ export default function NotFound() {
       <div className="state">
         <h2>404 — Page not found</h2>
         <p>
-          There is nothing at this address. The gallery lives at{' '}
-          <Link to="/dashboard">/dashboard</Link>.
+          There is nothing at this address. Please return to the gallery at{' '}
+          <Link to="/gallery">/gallery</Link>.
         </p>
       </div>
     </main>

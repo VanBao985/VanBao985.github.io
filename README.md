@@ -48,10 +48,10 @@ Routing happens on the client — there is only one HTML file.
 
 | Route | Screen |
 |---|---|
-| `/dashboard` | The gallery — this is the entry point |
+| `/gallery` | The gallery — this is the entry point |
 | `/` and anything else | Not-found screen |
 
-The site root `/` is deliberately not a route. Share the `/dashboard` URL.
+The site root `/` is deliberately not a route. Share the `/gallery` URL.
 
 > Note: the catch-all route is currently commented out in
 > [`src/App.jsx`](src/App.jsx), so `/` renders a blank page rather than the
@@ -60,10 +60,10 @@ The site root `/` is deliberately not a route. Share the `/dashboard` URL.
 ### How deep links survive GitHub Pages
 
 Pages serves static files and knows nothing about client-side routes, so
-`/dashboard` would normally 404. The build copies `dist/index.html` to
+`/gallery` would normally 404. The build copies `dist/index.html` to
 `dist/404.html`; Pages serves that for unknown paths, the app boots, and
-react-router renders the right screen. This keeps URLs clean (`/dashboard`,
-not `/#/dashboard`).
+react-router renders the right screen. This keeps URLs clean (`/gallery`,
+not `/#/gallery`).
 
 ## Project structure
 
@@ -92,7 +92,7 @@ not `/#/dashboard`).
 
 ```bash
 npm install
-npm run dev        # http://localhost:5173/dashboard
+npm run dev        # http://localhost:5173/gallery
 npm run sync:drive # refresh the photo list from Drive
 npm run build      # production build into dist/
 npm run preview    # serve dist/ locally on :4173
@@ -113,4 +113,4 @@ npm run preview    # serve dist/ locally on :4173
 
 Push to `main` — the `deploy.yml` workflow builds and publishes `dist/`. The
 repo's Pages source must be set to **GitHub Actions** (Settings → Pages →
-Source). Live at **https://vanbao985.github.io/dashboard**.
+Source). Live at **https://vanbao985.github.io/gallery**.

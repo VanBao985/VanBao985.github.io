@@ -7,8 +7,8 @@ export default function App() {
   return (
     <Routes>
       <Route element={<Layout />}>
-        <Route path="/dashboard" element={<Gallery />} />
-        {/* "/" deliberately has no route: the gallery lives at /dashboard,
+        <Route path="/gallery" element={<Gallery />} />
+        {/* "/" deliberately has no route: the gallery lives at /gallery,
             so the bare root falls through to the 404 screen below. */}
         {/* <Route path="*" element={<NotFound />} /> */}
       </Route>
