@@ -22,7 +22,7 @@ export default function App() {
         />
         {/* "/" deliberately has no route: the gallery lives at /dashboard,
             so the bare root falls through to the 404 screen below. */}
-        <Route path="*" element={<NotFound />} />
+        {/* <Route path="*" element={<NotFound />} /> */}
       </Route>
     </Routes>
   );
