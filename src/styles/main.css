@@ -1,10 +1,8 @@
 /* ==================================================================
-   Ki uc dai hoc — stylesheet
    Design tokens -> layout -> components
    ================================================================== */
 
 :root {
-  /* Palette: tong am, hoai niem — giay cu, muc nau, cam hoang hon */
   --paper:        #faf7f2;
   --paper-raised: #ffffff;
   --paper-sunken: #f2ece2;
@@ -205,6 +203,88 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
 }
 
 /* ------------------------------------------------------------------ *
+   Achievements — highlight band under the header
+ * ------------------------------------------------------------------ */
+
+.achievements { padding-block: clamp(2.2rem, 6vw, 3.4rem) 0; }
+
+.achievements__eyebrow {
+  font-size: .74rem;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--accent-ink);
+  font-weight: 600;
+  margin: 0 0 1.1rem;
+}
+
+.achievements__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(215px, 1fr));
+  gap: 1rem;
+}
+
+.achievement {
+  position: relative;
+  overflow: hidden;
+  background: var(--paper-raised);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.45rem 1.6rem 1.35rem;
+  box-shadow: var(--shadow);
+  animation: rise .5s var(--ease) backwards;
+  transition: transform .3s var(--ease), box-shadow .3s var(--ease);
+}
+
+.achievement:hover { transform: translateY(-3px); box-shadow: var(--shadow-lift); }
+
+.achievement::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent), color-mix(in srgb, var(--accent) 20%, transparent));
+}
+
+.achievement__value {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4.5vw, 2.6rem);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -.02em;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  display: flex;
+  align-items: baseline;
+  gap: .18em;
+}
+
+.achievement__unit {
+  font-size: .48em;
+  font-weight: 500;
+  color: var(--accent-ink);
+  letter-spacing: 0;
+}
+
+.achievement__label {
+  font-size: .78rem;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-top: .55rem;
+  display: block;
+}
+
+.achievement__note {
+  font-size: .82rem;
+  color: var(--ink-soft);
+  margin: .35rem 0 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .achievement { animation: none; transition: none; }
+}
+
+/* ------------------------------------------------------------------ *
    Filter bar
  * ------------------------------------------------------------------ */
 
@@ -272,7 +352,7 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
 }
 
 /* ------------------------------------------------------------------ *
-   Gallery — masonry bang CSS columns
+   Gallery — masonry via CSS columns
  * ------------------------------------------------------------------ */
 
 .gallery {

@@ -1,58 +1,99 @@
-# Kí ức đại học — vanbao985.github.io
+# College Memories — vanbao985.github.io
 
-Website tĩnh lưu giữ ảnh và kỉ niệm thời sinh viên, chạy trên GitHub Pages.
+A photo-memory site for student life, built as a React + Vite single-page app
+and hosted on GitHub Pages.
 
-## Kiến trúc
+## Architecture
 
-Không có server riêng. Toàn bộ hệ thống gồm hai lớp:
+There is no dedicated server. The whole system is two layers:
 
-| Lớp | Công nghệ | Vai trò |
+| Layer | Technology | Role |
 |---|---|---|
-| **Frontend** | HTML + CSS + Vanilla JS (ES Modules) | Thư viện ảnh công khai, không cần đăng nhập |
-| **Backend / Storage** | GitHub Contents API | Lưu ảnh và metadata ngay trong repo |
+| **Frontend** | React 18 + Vite + react-router | Single-page app: public gallery and admin panel |
+| **Backend / Storage** | GitHub Contents API | Stores photos and metadata inside the repo itself |
 
-Trang admin ghi dữ liệu bằng cách **commit trực tiếp qua REST API** của GitHub,
-dùng Personal Access Token (PAT) do bạn nhập ở trình duyệt. Mỗi lần upload là
-một commit; GitHub Pages tự động build lại site sau 1–2 phút.
+The admin route writes data by **committing directly through GitHub's REST API**,
+using a Personal Access Token (PAT) you paste into the browser. Each push to
+`main` triggers the GitHub Actions workflow, which rebuilds and redeploys the
+site in 1–2 minutes.
 
-**Vì sao không dùng Supabase/Firebase?** Free tier của các dịch vụ đó tự động
-pause project khi không hoạt động, và có rate limit theo lượt truy cập. GitHub
-Pages phục vụ file tĩnh qua CDN, không cold start, uptime cao hơn cho nhu cầu
-~100 ảnh.
+**Why not Supabase/Firebase?** Their free tiers pause idle projects and rate-limit
+traffic. GitHub Pages serves static files over a CDN with no cold starts —
+plenty for a collection of ~100 photos.
 
-## Cấu trúc thư mục
+## Routes
+
+Routing happens on the client — there is only one HTML file.
+
+| Route | Screen |
+|---|---|
+| `/dashboard` | Public gallery — the main entry point |
+| `/login` | Paste your PAT to sign in |
+| `/admin` | Upload and manage photos (requires a valid token) |
+| `/` and anything else | 404 screen |
+
+The site root `/` is deliberately **not** a route — the gallery lives at
+`/dashboard`, and the bare domain shows the 404 screen.
+
+### How deep links survive GitHub Pages
+
+GitHub Pages serves static files and knows nothing about client-side routes, so
+requesting `/admin` directly would normally 404. The build copies
+`dist/index.html` to `dist/404.html`; Pages serves that file for unknown paths,
+the app boots, and react-router renders the right screen from the URL. This
+keeps URLs clean (`/admin`, not `/#/admin`).
+
+## Project structure
 
 ```
-├── index.html            # Thư viện ảnh (public)
-├── admin.html            # Giao diện quản lí (cần token)
-├── assets/
-│   ├── css/style.css
-│   └── js/
-│       ├── github.js     # Storage adapter — GitHub Contents API
-│       ├── app.js        # Logic thư viện: lọc, tìm kiếm, lightbox
-│       └── admin.js      # Nén ảnh, upload, xoá
-├── data/memories.json    # "Database" — metadata của toàn bộ ảnh
-├── images/               # Ảnh đã upload
-└── .nojekyll             # Tắt Jekyll, phục vụ file nguyên trạng
+├── index.html                  # The only HTML entry (React mounts at #root)
+├── vite.config.js              # Build config + the 404.html SPA fallback plugin
+├── .github/workflows/deploy.yml# Build + deploy to GitHub Pages
+├── public/                     # Copied verbatim into dist/
+│   ├── .nojekyll               # Disable Jekyll on Pages
+│   ├── data/memories.json      # "Database" — metadata for all photos
+│   └── images/                 # Uploaded photos
+└── src/
+    ├── main.jsx                # React bootstrap (BrowserRouter + AuthProvider)
+    ├── App.jsx                 # Route table
+    ├── pages/                  # Gallery, Login, Admin
+    ├── components/             # Layout, Header, Footer, RequireAuth,
+    │                           # Achievements, StatCounter, Hero, Toolbar,
+    │                           # Gallery, Lightbox
+    ├── context/AuthContext.jsx # Reactive wrapper around the stored token
+    ├── data/achievements.js    # Config for the animated achievements band
+    ├── lib/github.js           # Storage adapter — GitHub Contents API
+    ├── lib/images.js           # Compression, slugify, byte formatting
+    ├── lib/assets.js           # Resolves public/ asset URLs
+    └── styles/main.css         # Design tokens + all styling
 ```
 
-## Schema của `data/memories.json`
+## Local development
+
+```bash
+npm install
+npm run dev       # http://localhost:5173
+npm run build     # production build into dist/
+npm run preview   # serve dist/ locally on :4173
+```
+
+## `public/data/memories.json` schema
 
 ```jsonc
 {
   "albums": [
-    { "id": "nam-nhat", "name": "Năm nhất", "order": 1 }
+    { "id": "graduation", "name": "Graduation", "order": 5 }
   ],
   "photos": [
     {
       "id": "uuid",
-      "src": "images/2024-06-15-le-tot-nghiep-a1b2c3.jpg",
-      "title": "Lễ tốt nghiệp",
+      "src": "images/2024-06-15-graduation-day-a1b2c3.jpg", // URL path
+      "title": "Graduation Day",
       "description": "…",
       "date": "2024-06-15",
-      "album": "tot-nghiep",
-      "location": "Sân trường",
-      "people": ["Bảo", "Minh"],
+      "album": "graduation",
+      "location": "Campus courtyard",
+      "people": ["Bao", "Minh"],
       "width": 2000,
       "height": 1333,
       "uploadedAt": "2024-06-16T10:00:00.000Z"
@@ -61,47 +102,53 @@ Pages phục vụ file tĩnh qua CDN, không cold start, uptime cao hơn cho nhu
 }
 ```
 
-`width`/`height` được lưu để đặt sẵn `aspect-ratio` cho ảnh, tránh layout shift
-(CLS) khi trang đang tải.
+`width`/`height` are stored so the gallery can set `aspect-ratio` up front and
+avoid layout shift (CLS) while images load.
 
-## Bảo mật
+Note: `src` is a **URL path** — the file itself lives at `public/images/...` in
+the repo. The admin panel maps between the two with `repoPath()` in
+`src/lib/github.js`, and the gallery resolves it for display with `assetUrl()`
+in `src/lib/assets.js`.
 
-- Repo là **public** (bắt buộc với GitHub Pages free) nhưng **không chứa token nào**.
-- PAT chỉ nằm trong `localStorage` của trình duyệt bạn dùng.
-- Dùng **fine-grained PAT** giới hạn đúng repo này, chỉ cấp quyền `Contents: Read and write`.
-- Khách vào xem không cần token và không thể ghi bất cứ thứ gì.
-- Nếu nghi ngờ lộ token: vào GitHub → Settings → Developer settings → thu hồi (revoke) rồi tạo lại.
+## Achievements band
 
-## Chạy thử ở máy
+The animated stats at the top of the gallery are configured in
+`src/data/achievements.js`. Each entry: `{ value, decimals, unit, label, note }`.
+Numbers count up from 0 on page load (skipped under `prefers-reduced-motion`).
 
-ES Modules không hoạt động qua `file://` (bị chặn bởi CORS policy), phải chạy
-qua HTTP server:
+## Security
 
-```bash
-python -m http.server 8000
-# rồi mở http://localhost:8000
-```
+- The repo is **public** (required for free GitHub Pages) but **contains no tokens**.
+- The PAT lives only in the `localStorage` of the browser you use.
+- Use a **fine-grained PAT** limited to this repo with only `Contents: Read and write`.
+- Visitors need no token and cannot write anything.
+- If you suspect the token leaked: GitHub → Settings → Developer settings → revoke it and create a new one.
 
-## Tinh chỉnh nén ảnh
+## Image compression tuning
 
-Sửa hằng số `COMPRESS` trong `assets/js/admin.js`:
+Edit the `COMPRESS` constant in `src/lib/images.js`:
 
 ```js
 const COMPRESS = {
-  maxDimension: 2000,     // cạnh dài nhất (px)
-  quality: 0.82,          // chất lượng JPEG 0–1
-  skipUnder: 300 * 1024,  // file nhỏ hơn ngưỡng này giữ nguyên
+  maxDimension: 2000,     // longest edge (px)
+  quality: 0.82,          // JPEG quality 0–1
+  skipUnder: 300 * 1024,  // files under this size are kept as-is
 };
 ```
 
-## Giới hạn cần biết
+## Platform limits
 
-| Hạng mục | Giới hạn |
+| Item | Limit |
 |---|---|
-| Dung lượng repo | 1 GB (khuyến nghị) |
-| Băng thông | 100 GB/tháng |
-| Số lần build | 10 lần/giờ |
-| GitHub API | 5.000 request/giờ |
+| Repo size | 1 GB (recommended) |
+| Bandwidth | 100 GB/month |
+| GitHub API | 5,000 requests/hour |
 
-Giới hạn build 10 lần/giờ đáng lưu ý nhất: mỗi ảnh upload là một commit, nên
-tránh upload quá nhiều ảnh liên tục trong thời gian ngắn.
+Each uploaded photo is one commit and each push triggers a deploy, so avoid
+uploading very large batches in rapid succession.
+
+## Deployment
+
+Push to `main` — the `deploy.yml` workflow builds the site and publishes
+`dist/` to GitHub Pages. The repo's Pages source must be set to
+**GitHub Actions** (Settings → Pages → Source).

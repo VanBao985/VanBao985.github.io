@@ -1,7 +1,11 @@
-# Worktree tam cua Claude Code
+# Dependencies and build output
+node_modules/
+dist/
+
+# Claude Code temporary worktrees
 .claude/worktrees/
 
-# He dieu hanh
+# OS
 .DS_Store
 Thumbs.db
 desktop.ini
@@ -11,5 +15,5 @@ desktop.ini
 .idea/
 *.swp
 
-# Cau hinh cuc bo cua Claude Code
+# Claude Code local config
 .claude/settings.local.json

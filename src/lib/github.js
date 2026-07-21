@@ -1,9 +1,9 @@
 /**
- * github.js — Storage adapter cho GitHub Contents API.
+ * github.js — storage adapter for the GitHub Contents API.
  *
- * Toan bo viec doc/ghi du lieu deu di qua file nay. Neu sau nay muon doi
- * sang Supabase / Cloudinary, chi can viet mot adapter khac co cung
- * interface (getFile / putFile / deleteFile) va thay import trong admin.js.
+ * All data reads/writes go through this file. To switch backends later
+ * (Supabase, Cloudinary, ...), implement another adapter with the same
+ * interface (getFile / putFile / deleteFile) and swap the import in admin.js.
  *
  * API docs: https://docs.github.com/en/rest/repos/contents
  */
@@ -14,23 +14,29 @@ export const REPO = {
   branch: 'main',
 };
 
-export const DATA_PATH = 'data/memories.json';
+// Files served by the site live under public/ in the repo but are deployed
+// at the site root. `src` values in memories.json are URL paths (images/...),
+// so repoPath() maps them to their repo location for API calls.
+export const PUBLIC_DIR = 'public';
 export const IMAGE_DIR = 'images';
+export const DATA_PATH = `${PUBLIC_DIR}/data/memories.json`;
+
+export const repoPath = (urlPath) => `${PUBLIC_DIR}/${urlPath}`;
 
 const API_ROOT = 'https://api.github.com';
 
 /* ------------------------------------------------------------------ *
  * Base64 helpers
  *
- * GitHub Contents API nhan/tra file duoi dang base64. btoa() cua trinh
- * duyet chi xu ly duoc Latin-1 nen se nem loi voi tieng Viet co dau —
- * phai encode qua UTF-8 bytes truoc.
+ * The Contents API sends/receives file bodies as base64. The browser's
+ * btoa() only handles Latin-1 and throws on accented characters, so we
+ * must go through UTF-8 bytes first.
  * ------------------------------------------------------------------ */
 
 export function utf8ToBase64(str) {
   const bytes = new TextEncoder().encode(str);
   let binary = '';
-  const CHUNK = 0x8000; // tranh tran stack khi apply() voi mang lon
+  const CHUNK = 0x8000; // avoid stack overflow in apply() with large arrays
   for (let i = 0; i < bytes.length; i += CHUNK) {
     binary += String.fromCharCode.apply(null, bytes.subarray(i, i + CHUNK));
   }
@@ -43,18 +49,18 @@ export function base64ToUtf8(b64) {
   return new TextDecoder().decode(bytes);
 }
 
-/** Blob -> base64 thuan (khong co prefix `data:image/jpeg;base64,`). */
+/** Blob -> plain base64 (no `data:image/jpeg;base64,` prefix). */
 export function blobToBase64(blob) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = () => resolve(String(reader.result).split(',')[1]);
-    reader.onerror = () => reject(new Error('Khong doc duoc file anh'));
+    reader.onerror = () => reject(new Error('Could not read the image file'));
     reader.readAsDataURL(blob);
   });
 }
 
 /* ------------------------------------------------------------------ *
- * Token — luu trong localStorage, KHONG BAO GIO commit vao repo.
+ * Token — stored in localStorage, NEVER committed to the repo.
  * ------------------------------------------------------------------ */
 
 const TOKEN_KEY = 'gh_pat';
@@ -72,7 +78,7 @@ export const auth = {
 
 async function request(path, options = {}) {
   const token = auth.get();
-  if (!token) throw new Error('Chua co token. Vui long dang nhap lai.');
+  if (!token) throw new Error('No token found. Please sign in again.');
 
   const res = await fetch(`${API_ROOT}${path}`, {
     ...options,
@@ -87,18 +93,18 @@ async function request(path, options = {}) {
 
   if (res.status === 401) {
     auth.clear();
-    throw new Error('Token khong hop le hoac da het han. Vui long tao token moi.');
+    throw new Error('Token is invalid or expired. Please create a new token.');
   }
   if (res.status === 403) {
-    throw new Error('Token thieu quyen "Contents: Read and write" cho repo nay.');
+    throw new Error('Token is missing the "Contents: Read and write" permission for this repo.');
   }
   if (res.status === 404) {
-    const err = new Error('Khong tim thay (404). Kiem tra lai ten repo hoac quyen token.');
+    const err = new Error('Not found (404). Check the repo name or token permissions.');
     err.status = 404;
     throw err;
   }
   if (res.status === 409 || res.status === 422) {
-    const err = new Error('Xung dot phien ban file (conflict).');
+    const err = new Error('File version conflict.');
     err.status = res.status;
     throw err;
   }
@@ -107,7 +113,7 @@ async function request(path, options = {}) {
     try {
       detail = (await res.json()).message || '';
     } catch { /* ignore */ }
-    throw new Error(`GitHub API loi ${res.status}. ${detail}`);
+    throw new Error(`GitHub API error ${res.status}. ${detail}`);
   }
 
   return res.status === 204 ? null : res.json();
@@ -120,19 +126,19 @@ const contentsUrl = (filePath) =>
  * Public API
  * ------------------------------------------------------------------ */
 
-/** Kiem tra token va quyen ghi. Tra ve thong tin repo neu hop le. */
+/** Verify the token and its write permission. Returns repo info if valid. */
 export async function verifyToken() {
   const repo = await request(`/repos/${REPO.owner}/${REPO.name}`);
   if (!repo.permissions?.push) {
-    throw new Error('Token khong co quyen ghi (push) vao repo nay.');
+    throw new Error('Token does not have write (push) access to this repo.');
   }
   return repo;
 }
 
 /**
- * Doc mot file. Tra ve { text, sha } — `sha` bat buoc phai gui kem khi
- * ghi de, day la co che optimistic concurrency control cua GitHub: neu
- * file da bi thay doi boi mot commit khac, sha khong khop -> 409.
+ * Read a file. Returns { text, sha } — `sha` must be sent back when
+ * overwriting; this is GitHub's optimistic concurrency control: if the
+ * file was changed by another commit, the sha mismatches -> 409.
  */
 export async function getFile(filePath) {
   try {
@@ -144,7 +150,7 @@ export async function getFile(filePath) {
   }
 }
 
-/** Tao moi hoac ghi de mot file. Tra ve commit info. */
+/** Create or overwrite a file. Returns commit info. */
 export async function putFile({ path, contentBase64, message, sha }) {
   return request(contentsUrl(path), {
     method: 'PUT',
@@ -157,7 +163,7 @@ export async function putFile({ path, contentBase64, message, sha }) {
   });
 }
 
-/** Xoa mot file. Bat buoc phai co sha. */
+/** Delete a file. `sha` is required. */
 export async function deleteFile({ path, sha, message }) {
   return request(contentsUrl(path), {
     method: 'DELETE',
@@ -166,7 +172,7 @@ export async function deleteFile({ path, sha, message }) {
 }
 
 /* ------------------------------------------------------------------ *
- * Data layer — doc/ghi memories.json
+ * Data layer — read/write memories.json
  * ------------------------------------------------------------------ */
 
 export const EMPTY_DB = { albums: [], photos: [] };
@@ -178,13 +184,13 @@ export async function loadDatabase() {
     const db = JSON.parse(text);
     return { db: { albums: db.albums || [], photos: db.photos || [] }, sha };
   } catch {
-    throw new Error(`${DATA_PATH} bi loi cu phap JSON. Can sua thu cong tren GitHub.`);
+    throw new Error(`${DATA_PATH} contains invalid JSON. It needs to be fixed manually on GitHub.`);
   }
 }
 
 /**
- * Ghi database. Tu dong retry mot lan neu gap conflict (409) — truong hop
- * nay xay ra khi ban upload tu hai tab/thiet bi cung luc.
+ * Write the database. Automatically retries once on a conflict (409) —
+ * this happens when uploading from two tabs/devices at the same time.
  */
 export async function saveDatabase(db, message, { retry = true } = {}) {
   const { sha } = await getFile(DATA_PATH);
