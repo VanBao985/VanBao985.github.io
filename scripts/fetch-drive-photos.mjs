@@ -100,8 +100,10 @@ async function main() {
 
   await mkdir(dirname(OUT_FILE), { recursive: true });
   await writeFile(
+    // Write date in vietnamese time zone
+    // new Date().toLocaleString('vi-VN'),
     OUT_FILE,
-    `${JSON.stringify({ syncedAt: new Date().toISOString(), folders }, null, 2)}\n`,
+    `${JSON.stringify({ syncedAt: new Date().toLocaleString('vi-VN'), folders }, null, 2)}\n`,
     'utf8'
   );
 
