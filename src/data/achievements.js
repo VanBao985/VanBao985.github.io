@@ -11,7 +11,7 @@ export const ACHIEVEMENTS = [
     decimals: 0,
     unit: 'M',
     label: 'Scholarships Awarded',
-    note: 'Merit-based, across four years',
+    note: 'Học bổng Khuyến khích học tập 5 kỳ, Học bổng Chắp cách Bách khoa 7 kỳ \n và các Học bổng doanh nghiệp khác',
   },
   {
     value: 3.9,
@@ -20,4 +20,11 @@ export const ACHIEVEMENTS = [
     label: 'CPA',
     note: 'Cumulative performance average',
   },
+  {
+    value: 2026,
+    decimals: 0,
+    unit: '',
+    label: 'Best Presentation Award',
+    note: 'Đồ án tốt nghiệp xuất sắc nhất Hội đồng'
+  }
 ];

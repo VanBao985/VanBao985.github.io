@@ -26,8 +26,15 @@
   --ease: cubic-bezier(.22, .61, .36, 1);
 }
 
+:root { color-scheme: light; }
+
+/* Dark palette. It applies when the system asks for dark *unless* the visitor
+   explicitly picked light, and always when they explicitly picked dark.
+   The declarations are duplicated because CSS has no way to share one
+   declaration block between two selectors — keep the two copies in sync. */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
     --paper:        #171513;
     --paper-raised: #211e1b;
     --paper-sunken: #100e0d;
@@ -41,6 +48,22 @@
     --shadow:      0 1px 2px rgba(0, 0, 0, .3), 0 8px 24px rgba(0, 0, 0, .35);
     --shadow-lift: 0 4px 10px rgba(0, 0, 0, .4), 0 20px 44px rgba(0, 0, 0, .5);
   }
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --paper:        #171513;
+  --paper-raised: #211e1b;
+  --paper-sunken: #100e0d;
+  --ink:          #ede7e0;
+  --ink-soft:     #a89e94;
+  --ink-faint:    #756c64;
+  --line:         #332e29;
+  --accent:       #e08a52;
+  --accent-soft:  #3a2418;
+  --accent-ink:   #f0a877;
+  --shadow:      0 1px 2px rgba(0, 0, 0, .3), 0 8px 24px rgba(0, 0, 0, .35);
+  --shadow-lift: 0 4px 10px rgba(0, 0, 0, .4), 0 20px 44px rgba(0, 0, 0, .5);
 }
 
 /* ------------------------------------------------------------------ *
@@ -148,6 +171,28 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
 
 .nav a:hover { background: var(--paper-sunken); color: var(--ink); }
 .nav a[aria-current='page'] { background: var(--accent-soft); color: var(--accent-ink); }
+
+.theme-toggle {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: background .18s var(--ease), color .18s var(--ease),
+              border-color .18s var(--ease), transform .18s var(--ease);
+}
+
+.theme-toggle:hover {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+
+.theme-toggle:active { transform: scale(.9); }
 
 /* ------------------------------------------------------------------ *
    Hero
@@ -485,3 +530,13 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
   justify-content: space-between;
   align-items: center;
 }
+
+.visitor-count {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+}
+
+.visitor-count__num { color: var(--ink-soft); font-weight: 500; }

@@ -84,7 +84,7 @@ export default function PhotoCarousel({ photos }) {
       </div>
 
       <div className="carousel__meta">
-        <span className="carousel__caption">{captionFromName(current.name)}</span>
+        {/* <span className="carousel__caption">{captionFromName(current.name)}</span> */}
         <span className="carousel__counter" aria-live="polite">
           {index + 1} / {count}
         </span>

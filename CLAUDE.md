@@ -33,6 +33,24 @@ There is exactly **one HTML entry** (`index.html` → `src/main.jsx` → `src/Ap
 - **Achievements** (`src/components/Achievements.jsx` + `StatCounter.jsx`): animated count-up band. Configure in `src/data/achievements.js` — no component changes needed.
 - **Carousel** (`src/components/PhotoCarousel.jsx`): the photo viewer — prev/next buttons, arrow keys, neighbour preloading, thumbnail strip.
 - **Hero** (`src/components/Hero.jsx`): total photo count plus the folder filter chips (chips only render when more than one folder is configured).
+- **Theme toggle** (`src/components/ThemeToggle.jsx`): light/dark switch in the header.
+- **Visit counter** (`src/components/VisitorCounter.jsx`): total visits, bottom-right of the footer.
+
+## Theming
+
+Three states, in priority order: an explicit choice on `<html data-theme>` wins, otherwise the system preference applies.
+
+- The dark palette is written **twice** in `main.css` — once under `@media (prefers-color-scheme: dark) { :root:not([data-theme='light']) }` and once under `:root[data-theme='dark']`. CSS cannot share a declaration block between two selectors, so **keep the two copies in sync** when changing colours.
+- `index.html` carries a small inline script that applies the saved theme **before first paint**. Without it the page renders in the system theme and visibly flips when React mounts. Do not move this into React.
+- Only an explicit click is persisted to `localStorage`. While nothing is stored the component keeps following the OS setting live via a `matchMedia` listener.
+
+## Visit counter
+
+The count lives on **counterapi.dev** (free, keyless) because a static site has nowhere to keep a running total. Consequences a future change should not forget:
+
+- Every page view hits a **third party**; the endpoint is public, so anyone reading the bundle could inflate the number. Treat it as decoration, not analytics.
+- Counted **once per browser session** (`sessionStorage`), and guarded by a ref because StrictMode runs effects twice in development.
+- If the service is unreachable the component renders **nothing** — never a broken placeholder. Keep that failure mode.
 
 ## Google Drive as the photo source
 
