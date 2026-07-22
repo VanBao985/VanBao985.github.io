@@ -484,6 +484,171 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
 }
 
 /* ------------------------------------------------------------------ *
+   Forms, panels and buttons — used by sign-in and the invitation maker
+ * ------------------------------------------------------------------ */
+
+.admin-shell { padding-block: 2.5rem 5rem; }
+
+.panel {
+  background: var(--paper-raised);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: clamp(1.4rem, 4vw, 2.2rem);
+  box-shadow: var(--shadow);
+}
+
+.panel__head { margin-bottom: 1.5rem; }
+.panel__head h2 { font-size: 1.35rem; margin-bottom: .35rem; }
+.panel__head p { margin: 0; color: var(--ink-soft); font-size: .92rem; }
+
+.login-wrap { max-width: 540px; margin-inline: auto; padding-block: 2rem; }
+
+.field { margin-bottom: 1.1rem; }
+
+.field label {
+  display: block;
+  font-size: .84rem;
+  font-weight: 600;
+  margin-bottom: .4rem;
+}
+
+.field__hint {
+  font-size: .8rem;
+  color: var(--ink-faint);
+  margin: .35rem 0 0;
+}
+
+.input {
+  width: 100%;
+  padding: .62rem .85rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--paper);
+  transition: border-color .18s var(--ease), box-shadow .18s var(--ease);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  padding: .62rem 1.35rem;
+  border-radius: 100px;
+  border: 1px solid transparent;
+  background: var(--ink);
+  color: var(--paper);
+  font-weight: 500;
+  font-size: .93rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform .15s var(--ease), opacity .18s var(--ease), background .18s var(--ease);
+}
+
+.btn:hover:not(:disabled) { transform: translateY(-1px); }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+
+.btn--accent { background: var(--accent); color: #fff; }
+.btn--ghost { background: transparent; border-color: var(--line); color: var(--ink-soft); }
+.btn--ghost:hover:not(:disabled) { border-color: var(--accent); color: var(--ink); }
+.btn--block { width: 100%; }
+.btn--sm { padding: .35rem .9rem; font-size: .85rem; }
+
+.alert {
+  padding: .8rem 1.05rem;
+  border-radius: var(--radius-sm);
+  font-size: .89rem;
+  margin-bottom: 1.2rem;
+  border: 1px solid;
+}
+
+.alert--error {
+  background: color-mix(in srgb, #b3452f 9%, transparent);
+  border-color: color-mix(in srgb, #b3452f 30%, transparent);
+  color: #b3452f;
+}
+
+/* ------------------------------------------------------------------ *
+   Invitation maker + public invitation
+ * ------------------------------------------------------------------ */
+
+.invite-layout {
+  display: grid;
+  grid-template-columns: minmax(280px, 380px) 1fr;
+  gap: 1.6rem;
+  align-items: start;
+}
+
+@media (max-width: 820px) {
+  .invite-layout { grid-template-columns: 1fr; }
+}
+
+.card-preview {
+  position: relative;
+  display: grid;
+  place-items: center;
+  padding: 1.2rem;
+  background: var(--paper-sunken);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+/* The canvas is drawn at 1200x1600 for a crisp download, then scaled down
+   here purely for display. */
+.card-canvas {
+  width: 100%;
+  max-width: 420px;
+  height: auto;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-lift);
+}
+
+.card-preview__hint {
+  position: absolute;
+  bottom: 1.4rem;
+  font-size: .82rem;
+  color: var(--ink-faint);
+  margin: 0;
+}
+
+.share-box {
+  margin-top: 1.5rem;
+  padding-top: 1.4rem;
+  border-top: 1px solid var(--line);
+  display: grid;
+  gap: .7rem;
+}
+
+.share-box__title {
+  margin: 0;
+  font-size: .84rem;
+  font-weight: 600;
+}
+
+.invite-page {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  justify-items: center;
+  padding-block: clamp(2rem, 6vw, 3.5rem) 4rem;
+}
+
+.invite-page .card-preview { width: min(100%, 520px); }
+
+.invite-cta {
+  text-align: center;
+  max-width: 46ch;
+}
+
+.invite-cta h2 { font-size: clamp(1.5rem, 4vw, 2rem); margin-bottom: .6rem; }
+.invite-cta p { color: var(--ink-soft); margin: 0 0 1.4rem; }
+
+/* ------------------------------------------------------------------ *
    Empty / loading / error states
  * ------------------------------------------------------------------ */
 

@@ -22,12 +22,17 @@ There is no lint or test tooling.
 
 There is exactly **one HTML entry** (`index.html` → `src/main.jsx` → `src/App.jsx`). Routes resolve on the client:
 
-| Route | Component | Notes |
-|---|---|---|
-| `/gallery` | `src/pages/Gallery.jsx` | the gallery — folder filter + carousel state lives here |
-| `*` | `src/pages/NotFound.jsx` | **currently commented out in `App.jsx`** (see below) |
+| Route | Component | Access | Notes |
+|---|---|---|---|
+| `/gallery` | `src/pages/Gallery.jsx` | public | folder filter + carousel state lives here |
+| `/invite` | `src/pages/Invite.jsx` | **public** | a guest's card; the name arrives as `?to=` |
+| `/invite-maker` | `src/pages/InviteMaker.jsx` | **admin** | wrapped in `RequireAuth` |
+| `/login` | `src/pages/Login.jsx` | public | GitHub PAT entry |
+| `*` | `src/pages/NotFound.jsx` | public | catch-all 404 |
 
-**`/` is intentionally not a route.** The gallery lives at `/gallery`. Note the catch-all is presently commented out, so `/` and unknown paths render a *blank page* rather than the 404 screen; uncommenting the one line in `App.jsx` restores it. Never point the catch-all at `/` — it would redirect to itself forever.
+**`/` is intentionally not a route.** The gallery lives at `/gallery`, so the bare root falls through to the catch-all. Never point the catch-all at `/` — it would redirect to itself forever.
+
+**`/invite` must stay public.** Guests have no account; gating it would break every link that has been handed out.
 
 - **Layout** (`src/components/Layout.jsx`): `Header` / `<Outlet/>` / `Footer` around every route.
 - **Achievements** (`src/components/Achievements.jsx` + `StatCounter.jsx`): animated count-up band. Configure in `src/data/achievements.js` — no component changes needed.
@@ -35,6 +40,27 @@ There is exactly **one HTML entry** (`index.html` → `src/main.jsx` → `src/Ap
 - **Hero** (`src/components/Hero.jsx`): total photo count plus the folder filter chips (chips only render when more than one folder is configured).
 - **Theme toggle** (`src/components/ThemeToggle.jsx`): light/dark switch in the header.
 - **Visit counter** (`src/components/VisitorCounter.jsx`): total visits, bottom-right of the footer.
+
+## Invitations
+
+The design is an **image** in `public/invite/`; code only draws the guest's name on top of it. Anything code could draw would be a poor imitation of a real exported design, so the split is deliberate: `src/data/invitation.js` says which template to use and where the name goes, and `src/lib/invitationCard.js` composites the two.
+
+Swapping in a new design means replacing the image, updating `width`/`height` to its real pixel size, and nudging `guestName.x` / `.y`. PNG and SVG both work.
+
+- **Guest names live in the URL** (`/invite?to=Minh`), not in any store. That is what lets a personalised link work on a static host with no backend, and why handing out a new invitation needs no rebuild.
+- The name is **untrusted input** from that URL. `cleanName()` caps it at 32 characters. React escapes it in the DOM and canvas `fillText` cannot execute it, but never route it into `dangerouslySetInnerHTML`.
+- **Size the whole line, not just the name.** `measureLine()` includes the `prefix` ("Thân mời:") and the gap; measuring the name alone let long names run off the edge of the label.
+- The template is loaded **once per page load** and must stay **same-origin** — a cross-origin image would taint the canvas and make `toBlob()` (the download) throw.
+- `drawInvitation()` awaits `document.fonts.ready`. Drawing earlier silently falls back to system fonts with no error to explain why the name looks wrong.
+- SVG templates are rendered in isolation and **cannot see the page's Google Fonts**, so any text baked into an SVG must use a system font that has real Vietnamese glyphs. Georgia does not — it renders "Lễ tốt nghiệp" with the accents detached.
+
+## Authentication
+
+Sign-in exists only to gate the invitation maker. `src/lib/auth.js` asks GitHub `/user` who the token belongs to and requires it to be `REPO.owner`.
+
+It checks **identity, not permission**, on purpose. The obvious alternative — "can this token read the repo?" — is worthless here because the repo is *public*, so every token passes. Checking the owner gives a real gate while needing no repository permissions at all, which keeps the token harmless if it ever leaks.
+
+Be clear-eyed about what this does *not* buy: nothing secret sits behind the gate, and a determined visitor could rebuild the card generator from the public bundle. It keeps the tab out of the way; it is not protecting data.
 
 ## Theming
 

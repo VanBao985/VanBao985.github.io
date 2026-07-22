@@ -46,16 +46,43 @@ Then redeploy (push to `main`, or run the workflow manually).
 
 Routing happens on the client — there is only one HTML file.
 
-| Route | Screen |
-|---|---|
-| `/gallery` | The gallery — this is the entry point |
-| `/` and anything else | Not-found screen |
+| Route | Screen | Access |
+|---|---|---|
+| `/gallery` | The gallery — the entry point | public |
+| `/invite?to=Name` | A guest's personalised invitation | public |
+| `/invite-maker` | Create and download invitations | admin |
+| `/login` | Paste a GitHub token to sign in | public |
+| `/` and anything else | Not-found screen | public |
 
 The site root `/` is deliberately not a route. Share the `/gallery` URL.
 
-> Note: the catch-all route is currently commented out in
-> [`src/App.jsx`](src/App.jsx), so `/` renders a blank page rather than the
-> 404 screen. Uncomment that line to restore it.
+## Invitations
+
+Sign in at `/login`, open **Invites**, type a friend's name and download their
+card as a PNG. Downloading also reveals a link like `/invite?to=Minh` — send
+that over and they see the same card, plus a button into the gallery.
+
+### Using your own design
+
+The card is an image in `public/invite/` with the guest's name drawn on top,
+so your design keeps its own fonts, photo and illustrations.
+
+1. Export your design **without a guest name**, leaving that area blank.
+2. Save it to `public/invite/` (PNG or SVG).
+3. In [`src/data/invitation.js`](src/data/invitation.js), point `template` at
+   it, set `width`/`height` to its real pixel size, and nudge
+   `guestName.x` / `.y` until the name lands where you want.
+
+`public/invite/template.svg` is a placeholder demo — replace it.
+
+The guest's name travels **inside the link**, so nothing is stored anywhere
+and no rebuild is needed to hand out a new invitation.
+
+**About the sign-in:** it asks GitHub who the token belongs to and requires it
+to be your account, so it cannot be faked by editing the bundle. The token
+needs **no repository permissions at all**. Be clear-eyed though — nothing
+secret sits behind the gate; it keeps the tab out of a casual visitor's way
+rather than protecting data.
 
 ### How deep links survive GitHub Pages
 
