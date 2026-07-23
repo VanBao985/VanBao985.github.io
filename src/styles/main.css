@@ -527,7 +527,20 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
   transition: border-color .18s var(--ease), box-shadow .18s var(--ease);
 }
 
-.input:focus {
+.textarea {
+  width: 100%;
+  padding: .62rem .85rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--paper);
+  resize: vertical;
+  min-height: 96px;
+  line-height: 1.55;
+  font-family: inherit;
+  transition: border-color .18s var(--ease), box-shadow .18s var(--ease);
+}
+
+.input:focus, .textarea:focus {
   outline: none;
   border-color: var(--accent);
   box-shadow: 0 0 0 3px var(--accent-soft);
@@ -558,6 +571,8 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
 .btn--ghost:hover:not(:disabled) { border-color: var(--accent); color: var(--ink); }
 .btn--block { width: 100%; }
 .btn--sm { padding: .35rem .9rem; font-size: .85rem; }
+.btn--danger { background: transparent; border-color: transparent; color: #b3452f; }
+.btn--danger:hover:not(:disabled) { background: color-mix(in srgb, #b3452f 12%, transparent); }
 
 .alert {
   padding: .8rem 1.05rem;
@@ -572,6 +587,99 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
   border-color: color-mix(in srgb, #b3452f 30%, transparent);
   color: #b3452f;
 }
+
+.alert--ok {
+  background: color-mix(in srgb, #4a7c59 10%, transparent);
+  border-color: color-mix(in srgb, #4a7c59 30%, transparent);
+  color: #4a7c59;
+}
+
+/* ------------------------------------------------------------------ *
+   Guestbook
+ * ------------------------------------------------------------------ */
+
+.guestbook {
+  padding-block: clamp(2.5rem, 7vw, 4rem) 4rem;
+  border-top: 1px solid var(--line);
+}
+
+.guestbook__intro { max-width: 52ch; margin-bottom: 1.8rem; }
+.guestbook__intro h2 { font-size: clamp(1.6rem, 4vw, 2.1rem); margin-bottom: .5rem; }
+.guestbook__intro p { color: var(--ink-soft); margin: 0; }
+
+.guestbook__form { max-width: 620px; margin-bottom: 2.6rem; }
+
+.guestbook__wall {
+  columns: 3 260px;
+  column-gap: 1rem;
+}
+
+.note {
+  break-inside: avoid;
+  margin-bottom: 1rem;
+  padding: 1.1rem 1.25rem;
+  background: var(--paper-raised);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow);
+}
+
+.note__body {
+  margin: 0 0 .6rem;
+  white-space: pre-wrap;   /* keep the line breaks a guest typed */
+  overflow-wrap: anywhere; /* a pasted URL must not widen the column */
+  font-size: .95rem;
+}
+
+.note__foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: .8rem;
+}
+
+.note__date {
+  font-size: .76rem;
+  color: var(--ink-faint);
+  letter-spacing: .04em;
+}
+
+/* Only ever rendered for a signed-in admin — guests never receive names */
+.note__name {
+  font-size: .76rem;
+  font-weight: 600;
+  color: var(--accent-ink);
+}
+
+.note__actions {
+  display: flex;
+  gap: .3rem;
+  margin-top: .7rem;
+  padding-top: .7rem;
+  border-top: 1px dashed var(--line);
+}
+
+/* A hidden note stays visible to the admin, but obviously muted */
+.note--hidden {
+  opacity: .55;
+  border-left-color: var(--ink-faint);
+  background: var(--paper-sunken);
+}
+
+.note--hidden .note__body { text-decoration: line-through; }
+
+.guestbook__adminhint {
+  font-size: .84rem;
+  color: var(--accent-ink);
+  background: var(--accent-soft);
+  padding: .6rem .9rem;
+  border-radius: var(--radius-sm);
+  margin: 0 0 1.4rem;
+}
+
+/* The wall spans the full width, so states inside it should not be boxed in */
+.guestbook__wall .state { padding-block: 2.5rem; }
 
 /* ------------------------------------------------------------------ *
    Invitation maker + public invitation

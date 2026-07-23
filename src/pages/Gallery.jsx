@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import Achievements from '../components/Achievements.jsx';
 import Hero from '../components/Hero.jsx';
 import PhotoCarousel from '../components/PhotoCarousel.jsx';
+import Guestbook from '../components/Guestbook.jsx';
 import { assetUrl } from '../lib/assets.js';
 
 export default function Gallery() {
@@ -60,10 +61,10 @@ export default function Gallery() {
         {status === 'error' && (
           <div className="state">
             <h2>Could not load photos</h2>
-            <p>
+            {/* <p>
               Failed to read <code>data/drive-photos.json</code> ({error}). Run{' '}
               <code>npm run sync:drive</code> and rebuild.
-            </p>
+            </p> */}
           </div>
         )}
 
@@ -82,6 +83,8 @@ export default function Gallery() {
           <PhotoCarousel key={activeFolder} photos={visible} />
         )}
       </div>
+
+      <Guestbook />
     </main>
   );
 }

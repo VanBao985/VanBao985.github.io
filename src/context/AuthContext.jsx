@@ -1,26 +1,44 @@
-import { createContext, useCallback, useContext, useMemo, useState } from 'react';
-import { auth } from '../lib/auth.js';
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { isConfigured } from '../data/supabase.js';
+import { getSession, onAuthChange, signIn as doSignIn, signOut as doSignOut } from '../lib/auth.js';
 
-/**
- * Reactive mirror of the token in localStorage. auth.js stays the source of
- * truth for requests; this only exists so the UI re-renders on sign in/out.
- */
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
-  const [isAuthed, setIsAuthed] = useState(() => auth.has());
+  const [session, setSession] = useState(null);
+  // Restoring a session from storage is async. Until it settles, a guard must
+  // not decide anything — otherwise refreshing an admin page bounces the
+  // signed-in admin straight back to the login screen.
+  const [ready, setReady] = useState(false);
 
-  const signIn = useCallback((token) => {
-    auth.set(token);
-    setIsAuthed(true);
+  useEffect(() => {
+    if (!isConfigured()) {
+      setReady(true);
+      return undefined;
+    }
+
+    let cancelled = false;
+    getSession()
+      .then((s) => { if (!cancelled) setSession(s); })
+      .finally(() => { if (!cancelled) setReady(true); });
+
+    const unsubscribe = onAuthChange((s) => setSession(s));
+    return () => { cancelled = true; unsubscribe(); };
   }, []);
 
-  const signOut = useCallback(() => {
-    auth.clear();
-    setIsAuthed(false);
+  const signIn = useCallback(async (email, password) => {
+    setSession(await doSignIn(email, password));
   }, []);
 
-  const value = useMemo(() => ({ isAuthed, signIn, signOut }), [isAuthed, signIn, signOut]);
+  const signOut = useCallback(async () => {
+    await doSignOut();
+    setSession(null);
+  }, []);
+
+  const value = useMemo(
+    () => ({ session, isAuthed: Boolean(session), ready, signIn, signOut }),
+    [session, ready, signIn, signOut]
+  );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

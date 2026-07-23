@@ -20,7 +20,7 @@ export default function Header() {
           {isAuthed && (
             <button
               className="btn btn--ghost btn--sm"
-              onClick={() => { signOut(); navigate('/gallery'); }}
+              onClick={async () => { await signOut(); navigate('/gallery'); }}
             >
               Sign out
             </button>

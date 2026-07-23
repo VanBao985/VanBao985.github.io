@@ -1,38 +1,32 @@
-import { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
-import { auth, verifyToken } from '../lib/auth.js';
+import { isConfigured } from '../data/supabase.js';
 import { useAuth } from '../context/AuthContext.jsx';
 
 /**
- * Gate for admin-only routes. A stored token is not enough — it may be
- * expired or have lost access — so it is re-checked against GitHub before
- * the page renders.
+ * Gate for admin-only routes.
+ *
+ * This is a convenience, not the security boundary — the real enforcement is
+ * in the database policies. Someone could bypass this component and still be
+ * unable to read a name or hide a note.
  */
 export default function RequireAuth({ children }) {
-  const { signOut } = useAuth();
-  const [state, setState] = useState('checking'); // checking | allowed | denied
+  const { isAuthed, ready } = useAuth();
 
-  useEffect(() => {
-    if (!auth.has()) {
-      setState('denied');
-      return undefined;
-    }
+  if (!isConfigured()) {
+    return (
+      <main className="wrap admin-shell">
+        <div className="state">
+          <h2>Not connected yet</h2>
+          <p>
+            Sign-in needs a Supabase project. See <code>docs/guestbook-setup.md</code>.
+          </p>
+        </div>
+      </main>
+    );
+  }
 
-    let cancelled = false;
-    verifyToken()
-      .then(() => !cancelled && setState('allowed'))
-      .catch(() => {
-        if (cancelled) return;
-        signOut();
-        setState('denied');
-      });
-
-    return () => { cancelled = true; };
-  }, [signOut]);
-
-  if (state === 'denied') return <Navigate to="/login" replace />;
-
-  if (state === 'checking') {
+  // Wait for the stored session to be restored before deciding
+  if (!ready) {
     return (
       <main className="wrap admin-shell">
         <div className="state">
@@ -42,6 +36,8 @@ export default function RequireAuth({ children }) {
       </main>
     );
   }
+
+  if (!isAuthed) return <Navigate to="/login" replace />;
 
   return children;
 }
