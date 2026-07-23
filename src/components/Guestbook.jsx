@@ -132,7 +132,7 @@ export default function Guestbook() {
                 value={name}
                 maxLength={MAX_NAME}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="e.g. Minh"
+                placeholder="e.g. Thư"
                 autoComplete="name"
               />
               <p className="field__hint">Only Van Bao can see this.</p>
@@ -147,7 +147,7 @@ export default function Guestbook() {
                 value={message}
                 maxLength={MAX_MESSAGE}
                 onChange={(e) => setMessage(e.target.value)}
-                placeholder="A memory, a wish, an inside joke…"
+                placeholder="Bạn thật tuyệt vời!"
               />
               <p className="field__hint">
                 {message.length} / {MAX_MESSAGE} · this part is shown publicly

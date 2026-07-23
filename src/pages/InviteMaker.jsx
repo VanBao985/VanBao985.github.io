@@ -75,7 +75,7 @@ export default function InviteMaker() {
               id="guest"
               value={name}
               maxLength={MAX_NAME}
-              placeholder="e.g. Minh"
+              placeholder="e.g. Thư"
               onChange={(e) => setName(e.target.value)}
               autoComplete="off"
             />
