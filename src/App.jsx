@@ -5,6 +5,8 @@ import Gallery from './pages/Gallery.jsx';
 import Login from './pages/Login.jsx';
 import InviteMaker from './pages/InviteMaker.jsx';
 import Invite from './pages/Invite.jsx';
+import PhotoLinkMaker from './pages/PhotoLinkMaker.jsx';
+import Photos from './pages/Photos.jsx';
 import NotFound from './pages/NotFound.jsx';
 
 export default function App() {
@@ -25,6 +27,20 @@ export default function App() {
         />
         {/* …but reading one must stay public: guests have no account. */}
         <Route path="/invite" element={<Invite />} />
+
+        {/* Same split for a guest's photos: making the link is admin-only… */}
+        <Route
+          path="/photo-links"
+          element={
+            <RequireAuth>
+              <PhotoLinkMaker />
+            </RequireAuth>
+          }
+        />
+        {/* …opening one is public. The bare path is matched too, so a link
+            that lost its folder id explains itself instead of 404ing. */}
+        <Route path="/photos" element={<Photos />} />
+        <Route path="/photos/:folderId" element={<Photos />} />
 
         {/* "/" deliberately has no route: the gallery lives at /gallery,
             so the bare root falls through to the 404 screen below. */}

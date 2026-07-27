@@ -15,7 +15,10 @@ export default function Header() {
         </Link>
         <nav className="nav">
           <NavLink to="/gallery">Gallery</NavLink>
-          {/* Sends guests to sign-in first; RequireAuth does the real gating. */}
+          {/* Both send guests to sign-in first; RequireAuth does the real
+              gating. A guest's own photo link is personal, so there is nothing
+              here for them to browse — only the tool that builds those links. */}
+          <NavLink to="/photo-links">Photos</NavLink>
           <NavLink to="/invite-maker">Invites</NavLink>
           {isAuthed && (
             <button
