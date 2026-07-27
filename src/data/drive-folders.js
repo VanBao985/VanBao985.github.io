@@ -12,5 +12,5 @@ export const DRIVE_FOLDERS = [
   { id: '1__Z22t7OTdcVKMvFAZak2Kc2Qy6TNxWu', name: 'Graduation' },
   { id: '1VRARA0cZH-mkf85gtr2ekhwp6n34UYcY', name: 'Hall B1' },
   { id: '11kcHQLaL_qXLaADQhqWzf9IvwN4C-aTX', name: 'Photobooth' },
-  { id: '1j8ZQOvVjBaNyztyMk2X20-65KElWEjRM', name: 'Linh Thư' }
+  // { id: '1j8ZQOvVjBaNyztyMk2X20-65KElWEjRM', name: 'Linh Thư' }
 ];
