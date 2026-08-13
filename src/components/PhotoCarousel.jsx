@@ -32,12 +32,28 @@ export default function PhotoCarousel({ photos }) {
     }
   }, [index, photos, count]);
 
-  // Keep the active thumbnail visible in the strip
+  // Keep the active thumbnail visible in the strip.
+  //
+  // The strip is scrolled directly rather than through scrollIntoView, which
+  // walks up every scrollable ancestor and moves the page as well. On first
+  // render that dragged the visitor ~760px down the gallery — straight past
+  // the Highlights band, which they then never saw. Setting scrollLeft here
+  // cannot move anything but the strip.
   useEffect(() => {
-    activeThumbRef.current?.scrollIntoView({
+    const strip = stripRef.current;
+    const thumb = activeThumbRef.current;
+    if (!strip || !thumb) return;
+
+    // Measured from the rects rather than offsetLeft: the strip is statically
+    // positioned, so the thumbnails' offsetParent is the page body and
+    // offsetLeft is ~100px out.
+    const offsetInStrip =
+      strip.scrollLeft + thumb.getBoundingClientRect().left - strip.getBoundingClientRect().left;
+    const centred = offsetInStrip - (strip.clientWidth - thumb.offsetWidth) / 2;
+
+    strip.scrollTo({
+      left: Math.max(0, centred),
       behavior: 'smooth',
-      block: 'nearest',
-      inline: 'center',
     });
   }, [index]);
 
