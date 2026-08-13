@@ -770,6 +770,62 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
 .invite-cta h2 { font-size: clamp(1.5rem, 4vw, 2rem); margin-bottom: .6rem; }
 .invite-cta p { color: var(--ink-soft); margin: 0 0 1.4rem; }
 
+/* The button is the only thing to do on this page, so it gets an arrow on
+   each side nudging towards it. */
+.invite-cta__action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .7rem;
+}
+
+.invite-cta__arrow {
+  color: var(--accent);
+  flex: none;
+  animation: invite-nudge 1.5s var(--ease) infinite;
+}
+
+/* The right-hand arrow is the same glyph mirrored, so both point inwards. */
+.invite-cta__arrow--flip { scale: -1 1; }
+
+.invite-cta__btn {
+  /* Bigger than a default button, and lifted off the page. */
+  padding: .8rem 1.7rem;
+  font-size: 1rem;
+  box-shadow: 0 6px 18px color-mix(in srgb, var(--accent) 35%, transparent);
+  animation: invite-throb 1.5s var(--ease) infinite;
+}
+
+.invite-cta__btn:hover { animation-play-state: paused; }
+
+@keyframes invite-nudge {
+  0%, 100% { transform: translateX(0); }
+  50%      { transform: translateX(5px); }
+}
+
+@keyframes invite-throb {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50%      { transform: translateY(-2px) scale(1.02); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .invite-cta__arrow,
+  .invite-cta__btn { animation: none; }
+}
+
+/* Side by side, the long label plus two arrows overflow a phone, so the arrows
+   move above and below instead of the button being squeezed. They rotate
+   opposite ways so both still point at it — and the mirroring is dropped,
+   since a rotated arrow does not need it. The nudge keeps working through the
+   rotation: `transform` is applied before the `rotate` property, so the same
+   translateX reads as "towards the button" in both. */
+@media (max-width: 560px) {
+  .invite-cta__action { flex-direction: column; gap: .35rem; }
+  .invite-cta__arrow { rotate: 90deg; }
+  .invite-cta__arrow--flip { rotate: -90deg; scale: 1 1; }
+  .invite-cta__btn { width: 100%; }
+}
+
 /* ------------------------------------------------------------------ *
    Guest photo page + the admin link maker
  * ------------------------------------------------------------------ */

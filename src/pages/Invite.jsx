@@ -38,14 +38,30 @@ export default function Invite() {
     <main className="wrap invite-page">
       <section className="invite-cta">
         <h2>Four years, in photographs</h2>
-        <p>
-          Before the ceremony, take a look through the lecture halls, the trips and
-          the late nights that led here.
-        </p>
-        <Link className="btn btn--accent" to="/gallery">
-          Explore the gallery
-        </Link>
-      </section> 
+        <p>Before the ceremony, look back on Văn Bảo&rsquo;s four years.</p>
+
+        <div className="invite-cta__action">
+          {/* Decorative only — the link already says where it goes, so a
+              screen reader gains nothing from two more "arrow" nodes. */}
+          <span className="invite-cta__arrow" aria-hidden="true">
+            <svg width="34" height="16" viewBox="0 0 34 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M2 8h28" />
+              <path d="m24 2 6 6-6 6" />
+            </svg>
+          </span>
+
+          <Link className="btn btn--accent invite-cta__btn" to="/gallery">
+            Explore the gallery and leave a note
+          </Link>
+
+          <span className="invite-cta__arrow invite-cta__arrow--flip" aria-hidden="true">
+            <svg width="34" height="16" viewBox="0 0 34 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M2 8h28" />
+              <path d="m24 2 6 6-6 6" />
+            </svg>
+          </span>
+        </div>
+      </section>
       
       <div className="card-preview">
         <canvas ref={canvasRef} className="card-canvas" />
