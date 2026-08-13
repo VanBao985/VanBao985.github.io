@@ -3,6 +3,8 @@ import Achievements from '../components/Achievements.jsx';
 import Hero from '../components/Hero.jsx';
 import PhotoCarousel from '../components/PhotoCarousel.jsx';
 import Guestbook from '../components/Guestbook.jsx';
+import Schedule from '../components/Schedule.jsx';
+import Venue from '../components/Venue.jsx';
 import { assetUrl } from '../lib/assets.js';
 
 export default function Gallery() {
@@ -85,6 +87,8 @@ export default function Gallery() {
       </div>
 
       <Guestbook />
+      <Schedule />
+      <Venue />
     </main>
   );
 }
