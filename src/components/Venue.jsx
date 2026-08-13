@@ -14,8 +14,6 @@ import { assetUrl } from '../lib/assets.js';
  * positioned as a percentage, so it stays on the building at every size.
  */
 export default function Venue() {
-  const { marker } = VENUE;
-
   return (
     <section id="venue" className="venue">
       <div className="wrap">
@@ -38,19 +36,26 @@ export default function Venue() {
                 width={VENUE.mapWidth}
                 height={VENUE.mapHeight}
                 loading="lazy"
-                alt={`Campus map of Hanoi University of Science and Technology. Lễ tốt nghiệp tổ chức tại ${VENUE.building}. Điểm hẹn vị trí chụp ảnh tại đường bên phải Đài phun nước cạnh tòa D3, D4; gửi xe tại hầm C7 hoặc bãi đậu xe C5.`}
+                alt={`Campus map of Hanoi University of Science and Technology. Lễ tốt nghiệp tổ chức tại ${VENUE.building}. Điểm hẹn vị trí chụp ảnh tại đường bên phải Đài phun nước cạnh tòa C3, C4; gửi xe tại hầm C7 hoặc bãi đậu xe C5.`}
               />
-              <span
-                className="venue__pin"
-                style={{
-                  left: `${marker.x}%`,
-                  top: `${marker.y}%`,
-                  width: `${VENUE.markerSize}%`,
-                }}
-                aria-hidden="true"
-              >
-                <span className="venue__pin-label">{marker.label}</span>
-              </span>
+              {/* aria-hidden: the same information is already spelled out in
+                  the image's alt text, so a screen reader would hear it twice. */}
+              {VENUE.markers.map((marker) => (
+                <span
+                  key={`${marker.x}-${marker.y}`}
+                  className={`venue__pin venue__pin--${marker.tone}${
+                    marker.labelBelow ? ' venue__pin--label-below' : ''
+                  }`}
+                  style={{
+                    left: `${marker.x}%`,
+                    top: `${marker.y}%`,
+                    width: `${marker.size}%`,
+                  }}
+                  aria-hidden="true"
+                >
+                  <span className="venue__pin-label">{marker.label}</span>
+                </span>
+              ))}
             </div>
           </div>
 

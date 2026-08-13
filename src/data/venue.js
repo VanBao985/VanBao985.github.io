@@ -18,15 +18,27 @@ export const VENUE = {
 
   building: 'Nhà C2',
 
-  // The meeting point, not the building: the ring marks the C3–C4 walkway
-  // where guests are met, at pixel (372, 292) of 1106 x 745. Stored as a
-  // percentage so it tracks the image at any width.
-  marker: { x: 30.0, y: 39.2, label: 'Meeting point' },
-
-  // Ring diameter as a percentage of the map's width, so it stays the same
-  // size relative to the buildings whether the map is panned on a phone or
-  // stretched across a desktop.
-  markerSize: 4.8,
+  // Rings drawn over the map. Positions and sizes are percentages of the
+  // image, so they track it at any width — the map is panned on a phone and
+  // stretched on a desktop, and a pixel offset would drift on both.
+  //
+  // `tone` picks the colour: 'meet' is red and is the only one that pulses,
+  // because everything else on this map is a supporting detail. Coordinates
+  // were measured off the marked-up map rather than eyeballed.
+  markers: [
+    // The C3–C4 walkway: pixel (332, 287) of 1106 x 745.
+    { x: 30.0, y: 39.2, size: 3.5, tone: 'meet', label: 'Meeting point' },
+    // Pixel (664, 511). Its label hangs below the ring: the labels are a fixed
+    // text size while the map scales, so on a narrow phone render this one —
+    // much the longest — collided with the Parking label above it.
+    {
+      x: 59.0, y: 68.5, size: 2.0, tone: 'gate',
+      label: 'Trần Đại Nghĩa Gate', labelBelow: true,
+    },
+    // Pixels (475, 386) and (546, 476).
+    { x: 44.6, y: 46.7, size: 1.0, tone: 'parking', label: 'Parking' },
+    { x: 50.4, y: 63.8, size: 1.0, tone: 'parking', label: 'Parking' },
+  ],
 
   // Nearest gate, by distance on the map.
   gate: 'Cổng Bác',

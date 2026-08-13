@@ -1017,26 +1017,45 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
   object-fit: contain;
 }
 
-/* Marker sits on the building; the ring is centred on the coordinate. */
+/* Marker sits on the spot; the ring is centred on the coordinate.
+   --pin carries the colour so each tone only overrides one value. */
 .venue__pin {
+  --pin: #d92d20;
+  --pin-ink: #fff;
   position: absolute;
   translate: -50% -50%;
   /* Width comes from the data as a percentage of the map, so the ring keeps
      its size relative to the buildings at every render width; a fixed pixel
      size would swallow the block on a panned phone map. */
   aspect-ratio: 1;
-  border: 3px solid #d92d20;
   border-radius: 50%;
-  box-shadow: 0 0 0 3px rgba(255, 255, 255, .85);
+  /* The ring is drawn as a gradient rather than a border so its thickness is a
+     proportion of the circle. With a fixed 3px border, a small marker lost its
+     hole entirely — at 1% on the 680px phone map the ring came out 6.8px wide
+     with 0.8px of hole, i.e. a solid dot. This keeps every size a ring. */
+  background: radial-gradient(closest-side, transparent 0 64%, var(--pin) 65% 100%);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, .8);
   pointer-events: none;
 }
 
-.venue__pin::after {
+.venue__pin--gate { --pin: #1f6fc4; }
+
+/* A genuinely pale yellow vanishes against the map's cream background, so this
+   keeps some depth — and the label flips to dark ink, because white lettering
+   on yellow cannot be read. */
+.venue__pin--parking {
+  --pin: #e0a800;
+  --pin-ink: #3d2c00;
+}
+
+/* Only the meeting point pulses. The rest are supporting detail, and four
+   competing animations would just make the map restless. */
+.venue__pin--meet::after {
   content: '';
   position: absolute;
-  inset: -3px;
+  inset: 0;
   border-radius: 50%;
-  border: 3px solid #d92d20;
+  background: radial-gradient(closest-side, transparent 0 64%, var(--pin) 65% 100%);
   animation: venue-pulse 2s var(--ease) infinite;
 }
 
@@ -1047,12 +1066,17 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
   translate: -50% 0;
   padding: .1rem .45rem;
   border-radius: 100px;
-  background: #d92d20;
-  color: #fff;
+  background: var(--pin);
+  color: var(--pin-ink);
   font-size: .72rem;
   font-weight: 700;
   line-height: 1.5;
   white-space: nowrap;
+}
+
+.venue__pin--label-below .venue__pin-label {
+  bottom: auto;
+  top: calc(100% + 6px);
 }
 
 @keyframes venue-pulse {
@@ -1062,7 +1086,7 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .venue__pin::after { animation: none; }
+  .venue__pin--meet::after { animation: none; }
 }
 
 .venue__caption {
