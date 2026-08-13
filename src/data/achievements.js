@@ -11,14 +11,14 @@ export const ACHIEVEMENTS = [
     decimals: 0,
     unit: 'M',
     label: 'Scholarships Awarded',
-    note: 'Học bổng Khuyến khích học tập 5 kỳ, Học bổng Chắp cách Bách khoa 7 kỳ \n và các Học bổng doanh nghiệp khác',
+    note: 'Học bổng Khuyến khích học tập 5 kỳ, Học bổng Chắp cách Bách khoa 7 kỳ \n và các Học bổng doanh nghiệp khác: VCB,...',
   },
   {
     value: 3.9,
     decimals: 1,
     unit: '/ 4.0',
     label: 'CPA',
-    note: 'Cumulative performance average',
+    note: 'Tốt nghiệp xuất sắc',
   },
   {
     value: 2026,
