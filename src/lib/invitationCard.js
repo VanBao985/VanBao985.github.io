@@ -67,8 +67,15 @@ function measureLine(ctx, name, size) {
   return { total: prefixWidth + gap + nameWidth, nameFont, nameWidth, prefixFont, prefixWidth, gap };
 }
 
-function drawGuestName(ctx, name) {
+function drawGuestName(ctx, rawName) {
   const cfg = INVITATION.guestName;
+  const name = cfg.uppercase ? rawName.toLocaleUpperCase('vi') : rawName;
+
+  // Set before measuring, not after: letterSpacing is part of what measureText
+  // reports, so measuring without it would under-size a tracked line and let
+  // it run past the label. Unsupported in older browsers, where it is simply
+  // ignored and the name renders untracked.
+  ctx.letterSpacing = `${cfg.tracking ?? 0}px`;
 
   // Shrink until the whole line fits inside maxWidth
   let size = cfg.size;
@@ -85,6 +92,7 @@ function drawGuestName(ctx, name) {
     ctx.textAlign = 'center';
     ctx.font = line.nameFont;
     ctx.fillText(name, cfg.x, cfg.y);
+    ctx.letterSpacing = '0px';
     return;
   }
 
@@ -95,6 +103,7 @@ function drawGuestName(ctx, name) {
   ctx.fillText(cfg.prefix, left, cfg.y);
   ctx.font = line.nameFont;
   ctx.fillText(name, left + line.prefixWidth + line.gap, cfg.y);
+  ctx.letterSpacing = '0px';
 }
 
 /**
