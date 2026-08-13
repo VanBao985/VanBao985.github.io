@@ -20,8 +20,9 @@ export default function Venue() {
         <p className="hero__eyebrow">Finding the hall</p>
         <h2 className="venue__title">The ceremony is in C2 Building</h2>
         <p className="venue__intro">
-          Campus map of Hanoi University of Science and Technology. Lễ tốt nghiệp tổ chức tại {VENUE.building}. 
-          Điểm hẹn vị trí chụp ảnh tại đường bên phải Đài phun nước cạnh tòa C3, C4; gửi xe tại hầm C7 hoặc bãi đậu xe C5.
+          Campus map of Hanoi University of Science and Technology. <br/>
+          Lễ tốt nghiệp tổ chức tại {VENUE.building}. 
+          Điểm hẹn chụp ảnh tại đường bên phải Đài phun nước cạnh tòa C3, C4; gửi xe tại hầm C7 hoặc bãi đậu xe C5.
         </p>
 
         <figure className="venue__figure">

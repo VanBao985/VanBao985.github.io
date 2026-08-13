@@ -16,7 +16,8 @@ export default function Schedule() {
         <h2 className="schedule__title">Four ceremonies across two days</h2>
         <p className="schedule__intro">
           The university hands out degrees in four sessions. Mine is the first
-          one, on Saturday morning.
+          one, on Saturday morning. <br/>
+          Lễ tốt nghiệp diễn ra trong 4 buổi. Buổi của mình là sáng thứ bảy 26.09.2026.
         </p>
 
         <ol className="schedule__list">

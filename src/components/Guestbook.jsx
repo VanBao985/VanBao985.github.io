@@ -111,7 +111,8 @@ export default function Guestbook() {
         <h2 id="guestbook-title">Sign the guestbook</h2>
         <p>
           Write something to remember this by. Your name is kept private — only
-          the message appears below.
+          the message appears below. <br/>
+          Để lại lời nhắn cho Văn Bảo. Tên của bạn sẽ được giữ bí mật, tin nhắn được hiển thị bên dưới.
         </p>
       </div>
 

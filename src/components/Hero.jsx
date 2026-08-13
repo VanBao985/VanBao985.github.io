@@ -7,7 +7,8 @@ export default function Hero({ total = 0, folders = [], activeFolder, onFolderCh
       </h1>
       <p className="hero__lede">
         Four years of lecture halls, spontaneous trips, deadline nights and
-        friends — gathered here before the memories fade.
+        friends — gathered here before the memories fade. <br/>
+        Hành trình 4 năm đại học — được lưu giữ ở đây trước khi ký ức phai nhạt.
       </p>
 
       {total > 0 && (
