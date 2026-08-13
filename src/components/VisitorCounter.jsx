@@ -11,9 +11,13 @@ import { useEffect, useRef, useState } from 'react';
  *
  * If the service is unreachable the component renders nothing rather than
  * showing a broken placeholder.
+ *
+ * This is counterapi v2; v1 is deprecated. The two differ in response shape as
+ * well as URL, so moving the endpoint alone leaves the counter invisible —
+ * see the parsing below.
  */
-const ENDPOINT = 'https://api.counterapi.dev/v1/vanbao985/college-memories';
-const SESSION_KEY = 'visit-counted';
+const ENDPOINT = 'https://api.counterapi.dev/v2/bao-cao-vans-team-4793/pageviews123';
+const SESSION_KEY = 'up_count';
 
 export default function VisitorCounter() {
   const [count, setCount] = useState(null);
@@ -27,9 +31,15 @@ export default function VisitorCounter() {
 
     // Count once per browser session, then only read — so hitting refresh
     // repeatedly does not inflate the total.
+    //
+    // The read path is '' and not '/': a trailing slash makes v2 answer 301,
+    // and the redirect carries no CORS header, so the browser kills the
+    // request outright. That failed silently for anyone on their second page
+    // view — the first view takes /up and works, which is what made it look
+    // like the counter worked for some visitors and not others.
     let path = '/up';
     try {
-      if (sessionStorage.getItem(SESSION_KEY)) path = '/';
+      if (sessionStorage.getItem(SESSION_KEY)) path = '';
       else sessionStorage.setItem(SESSION_KEY, '1');
     } catch {
       /* private mode: fall back to counting this view */
@@ -37,8 +47,13 @@ export default function VisitorCounter() {
 
     fetch(`${ENDPOINT}${path}`)
       .then((res) => (res.ok ? res.json() : Promise.reject(new Error(`HTTP ${res.status}`))))
-      .then((data) => {
-        if (typeof data?.count === 'number') setCount(data.count);
+      .then((body) => {
+        // v2 nests the counter and renames the field: `{ data: { up_count } }`,
+        // where v1 replied with a flat `{ count }`. Reading the old shape gives
+        // undefined, which silently hides the counter instead of erroring —
+        // exactly how this broke when the endpoint was switched over.
+        const total = body?.data?.up_count ?? body?.count;
+        if (typeof total === 'number') setCount(total);
       })
       .catch(() => {
         /* service down — leave the counter hidden */
