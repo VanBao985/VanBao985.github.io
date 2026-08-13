@@ -1079,6 +1079,114 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
 }
 
 /* ------------------------------------------------------------------ *
+   Contents list, pinned right of the gallery
+ * ------------------------------------------------------------------ */
+
+/* Jumping to a section would otherwise land it under the sticky header. Also
+   used by a shared /gallery#schedule link, which the browser resolves itself.
+   Smooth scrolling is not set globally on <html>: the nav asks for it per
+   jump, so nothing else on the site inherits an animated scroll. */
+#highlights, #photos, #guestbook, #schedule, #venue { scroll-margin-top: 5.5rem; }
+
+.section-nav {
+  position: fixed;
+  top: 50%;
+  right: 1rem;
+  translate: 0 -50%;
+  /* Under the header (z 50) so it never covers the brand or nav. */
+  z-index: 40;
+}
+
+.section-nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: .15rem;
+}
+
+.section-nav__link {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: .45rem;
+  padding: .3rem .1rem;
+  text-decoration: none;
+  color: var(--ink-faint);
+  font-size: .68rem;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: color .18s var(--ease);
+}
+
+/* Narrow screens get the rail on its own; the label floats out of flow beside
+   it on hover, so revealing one never reflows the rail or shoves it into the
+   photos. Wider screens promote the label back into the row — see below. */
+.section-nav__label {
+  position: absolute;
+  right: calc(100% - 14px);
+  margin-right: .55rem;
+  padding: .15rem .45rem;
+  border-radius: 4px;
+  background: var(--paper-sunken);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .16s var(--ease);
+}
+
+.section-nav__link:hover .section-nav__label,
+.section-nav__link:focus-visible .section-nav__label { opacity: 1; }
+
+.section-nav__line {
+  width: 14px;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+  opacity: .55;
+  flex: none;
+  transition: width .22s var(--ease), opacity .18s var(--ease);
+}
+
+.section-nav__link:hover { color: var(--ink); }
+.section-nav__link:hover .section-nav__line { opacity: 1; }
+
+.section-nav__link.is-active {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.section-nav__link.is-active .section-nav__line {
+  width: 26px;
+  opacity: 1;
+}
+
+/* The list sits in the margin beside the content, so how much of it can show
+   is decided by how wide that margin is. The content is min(100% - 2.5rem,
+   1180px) and centred, so each margin is (viewport - 1180) / 2 — measured, not
+   guessed: at 1385px the full version overlapped the page by 31px.
+   Below 1300px the margin is too thin even for the bare rail — at 1270px the
+   clearance measured exactly 0 — so it is dropped entirely and the page simply
+   reads top to bottom. */
+@media (max-width: 1299px) {
+  .section-nav { display: none; }
+}
+
+/* Room for the labels in the row: needs the margin to fit the whole item. */
+@media (min-width: 1460px) {
+  .section-nav__label {
+    position: static;
+    margin-right: 0;
+    padding: 0;
+    background: none;
+    opacity: 1;
+  }
+
+  .section-nav__link { justify-content: flex-start; }
+}
+
+/* ------------------------------------------------------------------ *
    Empty / loading / error states
  * ------------------------------------------------------------------ */
 

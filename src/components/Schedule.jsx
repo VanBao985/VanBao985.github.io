@@ -10,7 +10,7 @@ import { SCHEDULE } from '../data/schedule.js';
  */
 export default function Schedule() {
   return (
-    <section className="schedule">
+    <section id="schedule" className="schedule">
       <div className="wrap">
         <p className="hero__eyebrow">Graduation weekend</p>
         <h2 className="schedule__title">Four ceremonies across two days</h2>

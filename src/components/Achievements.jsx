@@ -3,7 +3,7 @@ import { ACHIEVEMENTS } from '../data/achievements.js';
 
 export default function Achievements() {
   return (
-    <section className="wrap achievements" aria-label="Achievements">
+    <section id="highlights" className="wrap achievements" aria-label="Achievements">
       <p className="achievements__eyebrow">Highlights</p>
       <div className="achievements__grid">
         {ACHIEVEMENTS.map((a, i) => (

@@ -1,6 +1,6 @@
 export default function Hero({ total = 0, folders = [], activeFolder, onFolderChange }) {
   return (
-    <section className="wrap hero">
+    <section id="photos" className="wrap hero">
       <p className="hero__eyebrow">A personal collection</p>
       <h1>
         Days that <em>won't come back</em>

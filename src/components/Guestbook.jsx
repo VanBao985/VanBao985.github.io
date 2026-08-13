@@ -105,7 +105,7 @@ export default function Guestbook() {
   const canSubmit = name.trim() && message.trim() && !sending;
 
   return (
-    <section className="wrap guestbook" aria-labelledby="guestbook-title">
+    <section id="guestbook" className="wrap guestbook" aria-labelledby="guestbook-title">
       <div className="guestbook__intro">
         <p className="hero__eyebrow">Leave a note</p>
         <h2 id="guestbook-title">Sign the guestbook</h2>

@@ -17,7 +17,7 @@ export default function Venue() {
   const { marker } = VENUE;
 
   return (
-    <section className="venue">
+    <section id="venue" className="venue">
       <div className="wrap">
         <p className="hero__eyebrow">Finding the hall</p>
         <h2 className="venue__title">The ceremony is in C2 Building</h2>
