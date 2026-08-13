@@ -2,8 +2,9 @@
 node_modules/
 dist/
 
-# Claude Code temporary worktrees
-.claude/worktrees/
+# Claude Code: local config, launch settings and temporary worktrees.
+# Machine-specific (absolute tool paths, ports), so it is not worth sharing.
+.claude/
 
 # OS
 .DS_Store
@@ -14,9 +15,6 @@ desktop.ini
 .vscode/
 .idea/
 *.swp
-
-# Claude Code local config
-.claude/settings.local.json
 
 # Docs
 docs/
