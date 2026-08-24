@@ -11,7 +11,7 @@ export const ACHIEVEMENTS = [
     decimals: 0,
     unit: 'M',
     label: 'Scholarships Awarded',
-    note: 'Học bổng Khuyến khích học tập 5 kỳ, Học bổng Chắp cách Bách khoa 7 kỳ \n và các Học bổng doanh nghiệp khác: VCB,...',
+    note: 'Học bổng Khuyến khích học tập 5 kỳ, Học bổng Chắp cách Bách khoa 7 kỳ \n và các Học bổng doanh nghiệp khác: Vietcombank,...',
   },
   {
     value: 3.9,
