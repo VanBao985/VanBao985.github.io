@@ -22,7 +22,7 @@
 // Leave it empty and the photo pages render a "not connected yet" notice
 // instead of breaking.
 export const DRIVE_API = {
-  key: 'AIzaSyDSywHS5pipBpM7yIwZ8tSvkUipoRrPfW8',
+  key: '1IcojGRJk_JOu64VPc7TZcZXamIPizy7K',
 };
 
 export const isDriveApiConfigured = () => Boolean(DRIVE_API.key);

@@ -9,8 +9,6 @@
 // sitting directly in a folder are picked up. That is why the two folders
 // below are listed explicitly rather than being found automatically.
 export const DRIVE_FOLDERS = [
-  { id: '1__Z22t7OTdcVKMvFAZak2Kc2Qy6TNxWu', name: 'Graduation' },
-  { id: '1VRARA0cZH-mkf85gtr2ekhwp6n34UYcY', name: 'Hall B1' },
-  { id: '11kcHQLaL_qXLaADQhqWzf9IvwN4C-aTX', name: 'Photobooth' },
+  { id: '1IcojGRJk_JOu64VPc7TZcZXamIPizy7K', name: 'Graduation Day & TP' },
   // { id: '1j8ZQOvVjBaNyztyMk2X20-65KElWEjRM', name: 'Linh Thư' }
 ];
