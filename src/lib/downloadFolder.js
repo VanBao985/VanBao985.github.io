@@ -43,7 +43,7 @@ export const safeFileName = (name) =>
     .replace(/[\\/:*?"<>|]+/g, ' ')
     .replace(/\s+/g, ' ')
     .trim()
-    .slice(0, 80) || 'photos';
+    .slice(0, 80) || 'anh';
 
 /**
  * One file's bytes, reporting progress as they arrive. Reading the stream
@@ -61,8 +61,8 @@ async function fetchPhoto(id, { signal, onChunk }) {
   if (!res.ok) {
     throw new Error(
       res.status === 403 || res.status === 404
-        ? 'One of the photos could not be read. The folder may have stopped being shared.'
-        : `A photo failed to download (HTTP ${res.status}).`,
+        ? 'Không thể đọc một trong các ảnh. Thư mục có thể đã ngừng được chia sẻ công khai.'
+        : `Không thể tải một ảnh (HTTP ${res.status}).`,
     );
   }
 

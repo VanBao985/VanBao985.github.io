@@ -62,24 +62,24 @@ export default function InviteMaker() {
   return (
     <main className="wrap admin-shell">
       <div className="panel__head">
-        <h2>Invitation maker</h2>
-        <p>Type a friend’s name, download their card, then share the link it generates.</p>
+        <h2>Tạo thiệp mời</h2>
+        <p>Nhập tên người nhận, tải thiệp xuống rồi gửi đường dẫn được tạo tự động.</p>
       </div>
 
       <div className="invite-layout">
         <div className="panel">
           <div className="field">
-            <label htmlFor="guest">Guest name</label>
+            <label htmlFor="guest">Tên người nhận</label>
             <input
               className="input"
               id="guest"
               value={name}
               maxLength={MAX_NAME}
-              placeholder="e.g. Thư"
+              placeholder="Ví dụ: Thư"
               onChange={(e) => setName(e.target.value)}
               autoComplete="off"
             />
-            <p className="field__hint">Up to {MAX_NAME} characters. Appears on the card.</p>
+            <p className="field__hint">Tối đa {MAX_NAME} ký tự; tên sẽ xuất hiện trên thiệp.</p>
           </div>
 
           <button
@@ -87,19 +87,19 @@ export default function InviteMaker() {
             onClick={handleDownload}
             disabled={!trimmed}
           >
-            Download card
+            Tải thiệp xuống
           </button>
 
           {shareUrl && (
             <div className="share-box">
-              <p className="share-box__title">Share this link with {trimmed}</p>
+              <p className="share-box__title">Gửi đường dẫn này cho {trimmed}</p>
               <input className="input" readOnly value={shareUrl} onFocus={(e) => e.target.select()} />
               <button className="btn btn--ghost btn--block" onClick={copyLink}>
-                {copied ? 'Copied' : 'Copy link'}
+                {copied ? 'Đã sao chép' : 'Sao chép đường dẫn'}
               </button>
               <p className="field__hint">
-                Opening it shows this exact card, plus a way into the{' '}
-                <Link to="/gallery">gallery</Link>.
+                Khi mở đường dẫn, người nhận sẽ thấy đúng tấm thiệp này và có
+                thể đi tiếp đến <Link to="/gallery">trang kỷ niệm</Link>.
               </p>
             </div>
           )}

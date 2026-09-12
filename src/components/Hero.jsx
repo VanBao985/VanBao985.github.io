@@ -1,21 +1,22 @@
 export default function Hero({ total = 0, folders = [], activeFolder, onFolderChange }) {
   return (
     <section id="photos" className="wrap hero">
-      <p className="hero__eyebrow">A personal collection</p>
+      <p className="hero__eyebrow">A personal collection · Bộ sưu tập cá nhân</p>
       <h1>
-        Days that <em>won't come back</em>
+        Days we will <em>always remember</em>
       </h1>
       <p className="hero__lede">
-        Four years of lecture halls, spontaneous trips, deadline nights and
-        friends — gathered here before the memories fade. <br/>
-        Hành trình 4 năm đại học — được lưu giữ ở đây trước khi ký ức phai nhạt.
+        Four years of lecture halls, spontaneous trips, late nights spent
+        racing deadlines and lasting friendships — all gathered here in photographs. <br/>
+        Bốn năm giảng đường, những chuyến đi bất chợt, những đêm chạy deadline
+        và tình bạn — tất cả được lưu lại qua từng khung hình.
       </p>
 
       {total > 0 && (
         <div className="hero__stats">
           <div className="stat">
             <span className="stat__num">{total}</span>
-            <span className="stat__label">Moments</span>
+            <span className="stat__label">Khoảnh khắc</span>
           </div>
 
           {/* Only worth showing chips once there is more than one folder */}
@@ -26,7 +27,7 @@ export default function Hero({ total = 0, folders = [], activeFolder, onFolderCh
                 aria-pressed={activeFolder === 'all'}
                 onClick={() => onFolderChange('all')}
               >
-                All<span className="chip__count">{total}</span>
+                Tất cả<span className="chip__count">{total}</span>
               </button>
               {folders.map((folder) => (
                 <button

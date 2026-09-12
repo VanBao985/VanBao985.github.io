@@ -21,18 +21,18 @@ export default function LinhThuInvitation({ guestName }) {
     <section id="invite" className="linhthu-invite" aria-labelledby="linhthu-invite-title">
       <div className="wrap linhthu-invite__layout">
         <div className="linhthu-invite__intro">
-          <p className="hero__eyebrow">Graduation invitation</p>
+          <p className="hero__eyebrow">Graduation invitation · Thiệp mời tốt nghiệp</p>
           <h1 id="linhthu-invite-title">
-            Một lời mời nhỏ từ <em>Linh Thư</em>
+            Hẹn bạn trong ngày tốt nghiệp của <em>Linh Thư</em>
           </h1>
           <p>
-            Cảm ơn bạn đã là một phần trong hành trình thanh xuân của mình.
-            Mình rất mong được gặp bạn trong ngày đặc biệt này.
+            Cảm ơn bạn đã đồng hành cùng mình trong những năm tháng thanh xuân.
+            Sự hiện diện của bạn sẽ khiến ngày đặc biệt này thêm trọn vẹn.
           </p>
 
           {!name && (
             <p className="linhthu-invite__tip">
-              Thêm tên khách vào cuối đường dẫn để tạo thiệp riêng, ví dụ{' '}
+              Thêm tên người nhận vào cuối đường dẫn để tạo thiệp riêng, ví dụ{' '}
               <code>/gallery/linhthu/NguyenVanA</code>.
             </p>
           )}
@@ -50,8 +50,8 @@ export default function LinhThuInvitation({ guestName }) {
             <p className="linhthu-card__salutation">Thân gửi</p>
             <h2>{name || 'Bạn thân mến'}</h2>
             <p>
-              Linh Thư trân trọng mời bạn đến chung vui và lưu lại những khoảnh
-              khắc đáng nhớ trong ngày lễ tốt nghiệp.
+              Linh Thư thân mời bạn đến chung vui trong lễ tốt nghiệp và cùng
+              mình lưu lại những khoảnh khắc đáng nhớ.
             </p>
           </div>
 
@@ -68,7 +68,7 @@ export default function LinhThuInvitation({ guestName }) {
             </div>
           </dl>
 
-          <p className="linhthu-card__signature">Hẹn gặp bạn — Linh Thư</p>
+          <p className="linhthu-card__signature">Mong được gặp bạn — Linh Thư</p>
         </article>
       </div>
     </section>

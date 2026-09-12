@@ -85,7 +85,7 @@ export async function addEntry({ name, message, guestbookKey = 'main' }) {
   };
 
   if (!payload.name || !payload.message) {
-    throw new Error('Please fill in both your name and your message.');
+    throw new Error('Vui lòng nhập đầy đủ tên và lời nhắn.');
   }
 
   const { table } = getGuestbookConfig(guestbookKey);

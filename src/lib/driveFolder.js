@@ -61,19 +61,19 @@ function explain(status, body) {
   const detail = body?.error?.details?.find((d) => d.reason)?.reason ?? '';
 
   if (detail === 'API_KEY_INVALID') {
-    return 'The Google Drive API key is not valid. Check the key in src/data/drive-api.js.';
+    return 'Khóa Google Drive API không hợp lệ. Hãy kiểm tra src/data/drive-api.js.';
   }
   if (detail === 'SERVICE_DISABLED' || reason === 'accessNotConfigured') {
-    return 'The Google Drive API is not enabled for this API key’s project.';
+    return 'Google Drive API chưa được bật cho dự án đang cấp khóa này.';
   }
   if (status === 404) {
-    return 'That folder was not found. Check the id, and make sure the folder is shared as "Anyone with the link".';
+    return 'Không tìm thấy thư mục. Hãy kiểm tra ID và bảo đảm thư mục được chia sẻ ở chế độ “Bất kỳ ai có đường liên kết”.';
   }
   if (status === 403) {
-    return 'Google refused the request. The API key may be restricted to other sites, or the folder is not shared publicly.';
+    return 'Google từ chối yêu cầu. Khóa API có thể đang giới hạn tên miền hoặc thư mục chưa được chia sẻ công khai.';
   }
   // Anything unmapped: Google's own sentence beats a guess of mine.
-  return body?.error?.message || `Drive replied with HTTP ${status}.`;
+  return body?.error?.message || `Google Drive phản hồi với mã HTTP ${status}.`;
 }
 
 /**

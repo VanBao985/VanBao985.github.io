@@ -24,10 +24,10 @@ export default function Invite() {
     return (
       <main className="wrap">
         <div className="state">
-          <h2>This invitation is incomplete</h2>
+          <h2>Thiệp mời chưa đầy đủ</h2>
           <p>
-            The link is missing a name. Ask for a new one — or head straight to the{' '}
-            <Link to="/gallery">gallery</Link>.
+            Đường dẫn đang thiếu tên người nhận. Hãy xin lại đường dẫn mới hoặc
+            ghé thẳng <Link to="/gallery">trang kỷ niệm</Link>.
           </p>
         </div>
       </main>
@@ -39,12 +39,14 @@ export default function Invite() {
       <section className="invite-cta">
         <h2>
           Four years, in photographs
-          {/* <span className="invite-cta__heading-vi">Bốn năm thanh xuân qua những bức ảnh</span> */}
+          <span className="invite-cta__heading-vi">
+            Bốn năm thanh xuân qua từng khung hình
+          </span>
         </h2>
         <p>
-          Before the ceremony, look back on Văn Bảo&rsquo;s four years.
+          Before the ceremony, let&rsquo;s look back on Văn Bảo&rsquo;s four-year journey.
           <span className="invite-cta__copy-vi">
-            Trước buổi lễ, hãy cùng nhìn lại hành trình bốn năm của Văn Bảo.
+            Trước ngày tốt nghiệp, hãy cùng nhìn lại hành trình bốn năm của Văn Bảo.
           </span>
         </p>
 
@@ -61,7 +63,7 @@ export default function Invite() {
           <Link className="btn btn--accent invite-cta__btn" to="/gallery">
             <span>Explore the gallery and leave a note</span>
             <span className="invite-cta__btn-vi">
-              Khám phá Hành trình 4 năm và để lại lời nhắn
+              Xem lại hành trình và gửi một lời nhắn
             </span>
           </Link>
 

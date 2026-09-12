@@ -16,9 +16,9 @@ export default function RequireAuth({ children }) {
     return (
       <main className="wrap admin-shell">
         <div className="state">
-          <h2>Not connected yet</h2>
+          <h2>Chưa thể đăng nhập</h2>
           <p>
-            Sign-in needs a Supabase project. See <code>docs/guestbook-setup.md</code>.
+            Dự án chưa được kết nối với Supabase. Vui lòng kiểm tra cấu hình hệ thống.
           </p>
         </div>
       </main>
@@ -31,7 +31,7 @@ export default function RequireAuth({ children }) {
       <main className="wrap admin-shell">
         <div className="state">
           <div className="spinner" style={{ margin: '0 auto 1rem' }} />
-          <p>Checking your access…</p>
+          <p>Đang kiểm tra quyền truy cập…</p>
         </div>
       </main>
     );

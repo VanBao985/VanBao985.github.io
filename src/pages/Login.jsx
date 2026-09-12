@@ -17,9 +17,9 @@ export default function Login() {
     return (
       <main className="wrap admin-shell">
         <div className="state">
-          <h2>Not connected yet</h2>
+          <h2>Chưa thể đăng nhập</h2>
           <p>
-            Sign-in needs a Supabase project. See <code>docs/guestbook-setup.md</code>.
+            Dự án chưa được kết nối với Supabase. Vui lòng kiểm tra cấu hình hệ thống.
           </p>
         </div>
       </main>
@@ -29,7 +29,7 @@ export default function Login() {
   async function handleSubmit(e) {
     e.preventDefault();
     if (!email.trim() || !password) {
-      setError('Please enter both your email and password.');
+      setError('Vui lòng nhập đầy đủ email và mật khẩu.');
       return;
     }
 
@@ -50,8 +50,8 @@ export default function Login() {
       <section className="login-wrap">
         <form className="panel" onSubmit={handleSubmit}>
           <div className="panel__head">
-            <h2>Admin sign-in</h2>
-            <p>For the invitation maker and moderating the guestbook.</p>
+            <h2>Đăng nhập quản trị</h2>
+            <p>Dành cho việc tạo thiệp mời, tạo đường dẫn ảnh và quản lý sổ lưu bút.</p>
           </div>
 
           {error && <div className="alert alert--error">{error}</div>}
@@ -69,7 +69,7 @@ export default function Login() {
           </div>
 
           <div className="field">
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password">Mật khẩu</label>
             <input
               className="input"
               id="password"
@@ -81,7 +81,7 @@ export default function Login() {
           </div>
 
           <button className="btn btn--accent btn--block" type="submit" disabled={busy}>
-            {busy ? 'Signing in…' : 'Sign in'}
+            {busy ? 'Đang đăng nhập…' : 'Đăng nhập'}
           </button>
         </form>
       </section>

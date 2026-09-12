@@ -54,18 +54,18 @@ export default function Photos() {
     <main>
       <div className="wrap photos-page">
         <section className="photos-intro">
-          <p className="hero__eyebrow">Your photos</p>
-          <h1>From the shoot</h1>
+          <p className="hero__eyebrow">Your photos · Ảnh của bạn</p>
+          <h1>Khoảnh khắc của riêng bạn</h1>
           <p>
             {status === 'ready' && photos.length > 0
-              ? 'Look through them with the arrows or the strip below, then take the whole set home as a single zip of full-size files.'
-              : 'The photos from your session live here.'}
+              ? 'Dùng các nút mũi tên để xem ảnh, hoặc tải toàn bộ ảnh gốc về dưới dạng một tệp ZIP.'
+              : 'Những bức ảnh dành riêng cho bạn sẽ xuất hiện tại đây.'}
           </p>
 
           {status === 'ready' && photos.length > 0 && (
             <div className="photos-intro__meta">
               <span className="photos-count">
-                {photos.length} {photos.length === 1 ? 'photo' : 'photos'}
+                {photos.length} ảnh
                 {totalBytes(photos) > 0 && ` · ${formatBytes(totalBytes(photos))}`}
               </span>
             </div>
@@ -79,41 +79,40 @@ export default function Photos() {
         {status === 'loading' && (
           <div className="state">
             <div className="spinner" style={{ margin: '0 auto 1rem' }} />
-            <p>Loading your photos…</p>
+            <p>Đang tải ảnh của bạn…</p>
           </div>
         )}
 
         {status === 'off' && (
           <div className="state">
-            <h2>Not connected yet</h2>
+            <h2>Chưa thể tải ảnh</h2>
             <p>
-              Photo links need a Google Drive API key. See{' '}
-              <code>src/data/drive-api.js</code>.
+              Tính năng ảnh riêng đang được cấu hình. Vui lòng quay lại sau.
             </p>
           </div>
         )}
 
         {status === 'bad-link' && (
           <div className="state">
-            <h2>This link is incomplete</h2>
+            <h2>Đường dẫn chưa đầy đủ</h2>
             <p>
-              It is missing the folder it should open. Ask for a new one — or head
-              straight to the <Link to="/gallery">gallery</Link>.
+              Đường dẫn đang thiếu thông tin thư mục ảnh. Hãy xin lại đường dẫn
+              mới hoặc ghé <Link to="/gallery">trang kỷ niệm</Link>.
             </p>
           </div>
         )}
 
         {status === 'error' && (
           <div className="state">
-            <h2>Could not open this folder</h2>
+            <h2>Không thể mở thư mục ảnh</h2>
             <p>{error}</p>
           </div>
         )}
 
         {status === 'ready' && photos.length === 0 && (
           <div className="state">
-            <h2>No photos here yet</h2>
-            <p>The folder is empty for now. Check back a little later.</p>
+            <h2>Chưa có ảnh</h2>
+            <p>Thư mục hiện đang trống. Hãy quay lại sau nhé.</p>
           </div>
         )}
 
@@ -125,17 +124,16 @@ export default function Photos() {
 
       <section className="thanks">
         <div className="wrap thanks__inner">
-          <h2>Thank you for being part of it</h2>
+          <h2>Cảm ơn bạn đã có mặt trong ngày đặc biệt này</h2>
           <p>
-            Thank you for sharing this day with us. These photos are yours to
-            keep — and there is more to see: the whole story in pictures, and a
-            guestbook still waiting for a note from you.
+            Hãy lưu lại những bức ảnh này như một kỷ niệm đẹp. Nếu còn thời gian,
+            mời bạn ghé xem trọn vẹn hành trình và để lại một lời nhắn nhé.
           </p>
           <div className="thanks__actions">
             {/* One link, not two: the guestbook sits at the foot of the gallery,
                 and react-router does not scroll to a hash on its own. */}
             <Link className="btn btn--accent" to="/gallery">
-              Open the gallery &amp; sign the guestbook
+              Xem trang kỷ niệm và gửi lời nhắn
             </Link>
           </div>
         </div>

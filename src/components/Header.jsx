@@ -14,21 +14,21 @@ export default function Header() {
       <div className="wrap site-header__inner">
         <Link className="brand" to={galleryPath}>
           <span className="brand__dot" />
-          {isLinhThuGallery ? 'Linh Thư · Graduation' : 'College Memories'}
+          {isLinhThuGallery ? 'Linh Thư · Tốt nghiệp' : 'Kỷ niệm đại học'}
         </Link>
         <nav className="nav">
-          <NavLink to={galleryPath}>Gallery</NavLink>
+          <NavLink to={galleryPath}>Kỷ niệm</NavLink>
           {/* Both send guests to sign-in first; RequireAuth does the real
               gating. A guest's own photo link is personal, so there is nothing
               here for them to browse — only the tool that builds those links. */}
-          {!isLinhThuGallery && <NavLink to="/photo-links">Photos</NavLink>}
-          {!isLinhThuGallery && <NavLink to="/invite-maker">Invites</NavLink>}
+          {!isLinhThuGallery && <NavLink to="/photo-links">Ảnh riêng</NavLink>}
+          {!isLinhThuGallery && <NavLink to="/invite-maker">Thiệp mời</NavLink>}
           {isAuthed && (
             <button
               className="btn btn--ghost btn--sm"
               onClick={async () => { await signOut(); navigate(galleryPath); }}
             >
-              Sign out
+              Đăng xuất
             </button>
           )}
           <ThemeToggle />

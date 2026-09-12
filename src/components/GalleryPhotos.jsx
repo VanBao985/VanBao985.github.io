@@ -49,22 +49,22 @@ export default function GalleryPhotos({ dataFile = 'data/drive-photos.json' }) {
         {status === 'loading' && (
           <div className="state">
             <div className="spinner" style={{ margin: '0 auto 1rem' }} />
-            <p>Loading photos…</p>
+            <p>Đang tải ảnh…</p>
           </div>
         )}
 
         {status === 'error' && (
           <div className="state">
-            <h2>Could not load photos</h2>
+            <h2>Không thể tải ảnh</h2>
+            <p>Vui lòng thử tải lại trang sau ít phút.</p>
           </div>
         )}
 
         {status === 'ready' && total === 0 && (
           <div className="state">
-            <h2>No photos yet</h2>
+            <h2>Chưa có ảnh</h2>
             <p>
-              The Drive folders have no images directly in them. Add some, then
-              re-run the deploy to refresh the gallery.
+              Thư mục Google Drive hiện chưa có ảnh. Hãy quay lại sau nhé.
             </p>
           </div>
         )}

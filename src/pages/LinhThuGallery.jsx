@@ -16,7 +16,7 @@ export default function LinhThuGallery() {
     const previousTitle = document.title;
     document.title = displayName
       ? `${displayName} · Thiệp mời tốt nghiệp của Linh Thư`
-      : 'Gallery · Linh Thư';
+      : 'Kỷ niệm tốt nghiệp · Linh Thư';
 
     return () => { document.title = previousTitle; };
   }, [displayName]);
@@ -29,7 +29,6 @@ export default function LinhThuGallery() {
       <Guestbook
         guestbookKey="linhthu"
         ownerName="Linh Thư"
-        ownerNamePlain="Linh Thu"
       />
       <Schedule ownerName="Linh Thư" />
       <Venue />

@@ -12,12 +12,13 @@ export default function Schedule({ ownerName = 'Văn Bảo' }) {
   return (
     <section id="schedule" className="schedule">
       <div className="wrap">
-        <p className="hero__eyebrow">Graduation Week</p>
-        <h2 className="schedule__title">Four ceremonies across two days</h2>
+        <p className="hero__eyebrow">Graduation schedule · Lịch tốt nghiệp</p>
+        <h2 className="schedule__title">Bốn buổi lễ trong hai ngày</h2>
         <p className="schedule__intro">
-          The university hands out degrees in four sessions. Mine is the first
-          one, on Saturday morning. <br/>
-          Lễ tốt nghiệp diễn ra trong 4 buổi. Buổi của {ownerName} là sáng thứ bảy 26.09.2026.
+          The university&rsquo;s graduation ceremony takes place over four sessions.
+          The highlighted session is on Saturday morning. <br/>
+          Lễ tốt nghiệp được tổ chức trong bốn buổi. Buổi của {ownerName} diễn ra
+          vào sáng thứ Bảy, ngày 26.09.2026.
         </p>
 
         <ol className="schedule__list">
@@ -35,7 +36,7 @@ export default function Schedule({ ownerName = 'Văn Bảo' }) {
               </div>
 
               <div className="schedule__what">
-                {slot.mine && <span className="schedule__badge">My ceremony</span>}
+                {slot.mine && <span className="schedule__badge">Lễ tốt nghiệp của {ownerName}</span>}
                 <p className="schedule__detail">{slot.detail}</p>
                 {slot.mine && (slot.time || slot.venue) && (
                   <p className="schedule__where">

@@ -63,13 +63,13 @@ export default function VisitorCounter() {
   if (count === null) return null;
 
   return (
-    <span className="visitor-count" title="Total visits">
+    <span className="visitor-count" title="Tổng lượt xem">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z" />
         <circle cx="12" cy="12" r="3" />
       </svg>
       <span className="visitor-count__num">{count.toLocaleString()}</span>
-      visits
+      lượt xem
     </span>
   );
 }

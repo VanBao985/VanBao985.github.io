@@ -65,7 +65,7 @@ export default function SectionNav({ sections = SECTIONS }) {
   }
 
   return (
-    <nav className="section-nav" aria-label="Page sections">
+    <nav className="section-nav" aria-label="Các phần trên trang">
       <ul>
         {sections.map((section) => (
           <li key={section.id}>

@@ -50,12 +50,12 @@ export default function PhotoLinkMaker() {
       const photos = await listFolderPhotos(folderId);
       setCheck(
         photos.length > 0
-          ? { kind: 'ok', text: `Reachable — ${photos.length} ${photos.length === 1 ? 'photo' : 'photos'} found.` }
-          : { kind: 'error', text: 'Reachable, but there are no images directly in this folder. Subfolders are not included.' }
+          ? { kind: 'ok', text: `Đã kết nối — tìm thấy ${photos.length} ảnh.` }
+          : { kind: 'error', text: 'Đã kết nối nhưng thư mục chưa có ảnh trực tiếp. Ảnh trong thư mục con không được tính.' }
       );
     } catch (err) {
       const text = err.message === 'not-configured'
-        ? 'No Drive API key is set yet.'
+        ? 'Chưa cấu hình khóa Google Drive API.'
         : err.message;
       setCheck({ kind: 'error', text });
     } finally {
@@ -66,45 +66,45 @@ export default function PhotoLinkMaker() {
   return (
     <main className="wrap admin-shell">
       <div className="panel__head">
-        <h2>Photo links</h2>
-        <p>Give each guest their own Drive folder, then share the link it makes.</p>
+        <h2>Tạo đường dẫn ảnh riêng</h2>
+        <p>Mỗi người nhận có một thư mục Drive riêng và một đường dẫn để xem ảnh.</p>
       </div>
 
       {!isDriveApiConfigured() && (
         <div className="alert alert--error">
-          No Google Drive API key is set, so these links will not load any
-          photos yet. Add one in <code>src/data/drive-api.js</code>.
+          Chưa cấu hình khóa Google Drive API nên các đường dẫn chưa thể tải
+          ảnh. Hãy bổ sung khóa trong <code>src/data/drive-api.js</code>.
         </div>
       )}
 
       <div className="panel link-maker">
         <div className="field">
-          <label htmlFor="folder">Drive folder link or id</label>
+          <label htmlFor="folder">Đường dẫn hoặc ID thư mục Drive</label>
           <input
             className="input"
             id="folder"
             value={input}
-            placeholder="https://drive.google.com/drive/folders/… or the id on its own"
+            placeholder="https://drive.google.com/drive/folders/… hoặc chỉ nhập ID"
             onChange={(e) => setInput(e.target.value)}
             autoComplete="off"
             spellCheck="false"
           />
           <p className="field__hint">
-            In Drive: right-click the guest’s folder → Share → set it to{' '}
-            <strong>Anyone with the link</strong>, then paste that link here.
+            Trong Drive: nhấp chuột phải vào thư mục → Chia sẻ → chọn{' '}
+            <strong>Bất kỳ ai có đường liên kết</strong>, rồi dán đường dẫn vào đây.
           </p>
         </div>
 
         {input.trim() && !folderId && (
           <div className="alert alert--error">
-            That does not look like a Drive folder link or id.
+            Nội dung này không giống đường dẫn hoặc ID thư mục Google Drive.
           </div>
         )}
 
         {folderId && (
           <>
             <div className="share-box">
-              <p className="share-box__title">Share this link with your guest</p>
+              <p className="share-box__title">Gửi đường dẫn này cho người nhận</p>
               <input
                 className="input"
                 readOnly
@@ -113,17 +113,17 @@ export default function PhotoLinkMaker() {
               />
               <div className="link-maker__actions">
                 <button className="btn btn--accent" onClick={copyLink}>
-                  {copied ? 'Copied' : 'Copy link'}
+                  {copied ? 'Đã sao chép' : 'Sao chép đường dẫn'}
                 </button>
                 <button
                   className="btn btn--ghost"
                   onClick={checkFolder}
                   disabled={checking || !isDriveApiConfigured()}
                 >
-                  {checking ? 'Checking…' : 'Check folder'}
+                  {checking ? 'Đang kiểm tra…' : 'Kiểm tra thư mục'}
                 </button>
                 <Link className="btn btn--ghost" to={`/photos/${folderId}`}>
-                  Preview
+                  Xem trước
                 </Link>
               </div>
 
@@ -134,11 +134,10 @@ export default function PhotoLinkMaker() {
               )}
 
               <p className="field__hint">
-                Anyone with this link can see the folder’s photos — the same
-                promise the Drive folder itself makes. It works straight away;
-                no rebuild is needed.{' '}
+                Bất kỳ ai có đường dẫn đều có thể xem ảnh trong thư mục. Đường
+                dẫn hoạt động ngay và không cần build lại website.{' '}
                 <a href={folderUrl(folderId)} target="_blank" rel="noopener noreferrer">
-                  Open the folder in Drive
+                  Mở thư mục trong Drive
                 </a>
                 .
               </p>

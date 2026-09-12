@@ -5,17 +5,17 @@
 // order: the highlight picks the first entry currently in view, so an entry
 // out of order would light up at the wrong time.
 export const SECTIONS = [
-  { id: 'highlights', label: 'Highlights' },
-  { id: 'photos', label: 'Photos' },
-  { id: 'guestbook', label: 'Guestbook' },
-  { id: 'schedule', label: 'Schedule' },
-  { id: 'venue', label: 'Map' },
+  { id: 'highlights', label: 'Dấu ấn' },
+  { id: 'photos', label: 'Ảnh' },
+  { id: 'guestbook', label: 'Lưu bút' },
+  { id: 'schedule', label: 'Lịch' },
+  { id: 'venue', label: 'Bản đồ' },
 ];
 
 export const LINHTHU_SECTIONS = [
-  { id: 'invite', label: 'Invite' },
-  { id: 'photos', label: 'Photos' },
-  { id: 'guestbook', label: 'Guestbook' },
-  { id: 'schedule', label: 'Schedule' },
-  { id: 'venue', label: 'Map' },
+  { id: 'invite', label: 'Thiệp mời' },
+  { id: 'photos', label: 'Ảnh' },
+  { id: 'guestbook', label: 'Lưu bút' },
+  { id: 'schedule', label: 'Lịch' },
+  { id: 'venue', label: 'Bản đồ' },
 ];

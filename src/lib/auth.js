@@ -23,13 +23,18 @@ export const supabase = isConfigured()
   : null;
 
 export async function signIn(email, password) {
-  if (!supabase) throw new Error('Supabase is not configured yet.');
+  if (!supabase) throw new Error('Supabase chưa được cấu hình.');
 
   const { data, error } = await supabase.auth.signInWithPassword({
     email: email.trim(),
     password,
   });
-  if (error) throw new Error(error.message);
+  if (error) {
+    const message = error.message.toLowerCase().includes('invalid login credentials')
+      ? 'Email hoặc mật khẩu không đúng.'
+      : `Không thể đăng nhập: ${error.message}`;
+    throw new Error(message);
+  }
   return data.session;
 }
 

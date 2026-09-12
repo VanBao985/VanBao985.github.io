@@ -17,12 +17,13 @@ export default function Venue() {
   return (
     <section id="venue" className="venue">
       <div className="wrap">
-        <p className="hero__eyebrow">Finding the hall</p>
-        <h2 className="venue__title">The ceremony is in C2 Building</h2>
+        <p className="hero__eyebrow">Venue · Địa điểm</p>
+        <h2 className="venue__title">Lễ tốt nghiệp tại Nhà C2</h2>
         <p className="venue__intro">
           Campus map of Hanoi University of Science and Technology. <br/>
-          Lễ tốt nghiệp tổ chức tại {VENUE.building}. 
-          Điểm hẹn chụp ảnh tại đường bên phải Đài phun nước cạnh tòa C3, C4; gửi xe tại hầm C7 hoặc bãi đậu xe C5.
+          Lễ tốt nghiệp được tổ chức tại {VENUE.building}. Điểm hẹn chụp ảnh nằm
+          trên lối đi bên phải đài phun nước, gần tòa C3–C4. Bạn có thể gửi xe
+          tại hầm C7 hoặc bãi đỗ xe C5.
         </p>
 
         <figure className="venue__figure">
@@ -37,7 +38,7 @@ export default function Venue() {
                 width={VENUE.mapWidth}
                 height={VENUE.mapHeight}
                 loading="lazy"
-                alt={`Campus map of Hanoi University of Science and Technology. Lễ tốt nghiệp tổ chức tại ${VENUE.building}. Điểm hẹn vị trí chụp ảnh tại đường bên phải Đài phun nước cạnh tòa C3, C4; gửi xe tại hầm C7 hoặc bãi đậu xe C5.`}
+                alt={`Bản đồ Đại học Bách khoa Hà Nội. Lễ tốt nghiệp tại ${VENUE.building}; điểm hẹn chụp ảnh gần tòa C3–C4; khu vực gửi xe tại C7 và C5.`}
               />
               {/* aria-hidden: the same information is already spelled out in
                   the image's alt text, so a screen reader would hear it twice. */}
@@ -63,9 +64,9 @@ export default function Venue() {
           <figcaption className="venue__caption">
             {/* Only worth saying while the map is actually wider than the
                 screen; CSS drops it once it fits. */}
-            <span className="venue__hint">Drag the map sideways to see all of it. </span>
+            <span className="venue__hint">Kéo ngang để xem toàn bộ bản đồ. </span>
             <a href={assetUrl(VENUE.map)} target="_blank" rel="noopener noreferrer">
-              Open the full-size map
+              Mở bản đồ kích thước đầy đủ
             </a>
           </figcaption>
         </figure>

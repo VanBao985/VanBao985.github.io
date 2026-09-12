@@ -65,7 +65,7 @@ export default function DownloadAll({ folderId, photos }) {
             className="btn btn--ghost btn--sm"
             onClick={() => abort.current?.abort()}
           >
-            Cancel
+            Hủy
           </button>
         ) : (
           <button
@@ -73,7 +73,7 @@ export default function DownloadAll({ folderId, photos }) {
             onClick={start}
             disabled={tooBig}
           >
-            Download all photos
+            Tải toàn bộ ảnh
             {total > 0 && ` (${formatBytes(total)})`}
           </button>
         )}
@@ -84,7 +84,7 @@ export default function DownloadAll({ folderId, photos }) {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Open in Drive
+          Mở trong Google Drive
         </a>
       </div>
 
@@ -96,13 +96,13 @@ export default function DownloadAll({ folderId, photos }) {
             aria-valuemin={0}
             aria-valuemax={100}
             aria-valuenow={percent}
-            aria-label="Download progress"
+            aria-label="Tiến trình tải ảnh"
           >
             <span className="dl__bar" style={{ width: `${percent}%` }} />
           </div>
           <p className="dl__status">
-            {percent}% · {formatBytes(loaded)} of {formatBytes(total)} — keep
-            this tab open, the zip is saved when it finishes.
+            {percent}% · {formatBytes(loaded)} / {formatBytes(total)} — hãy giữ
+            tab này mở; tệp ZIP sẽ tự động được lưu khi hoàn tất.
           </p>
         </div>
       )}
@@ -111,8 +111,8 @@ export default function DownloadAll({ folderId, photos }) {
 
       {tooBig && (
         <p className="dl__status">
-          This folder is {formatBytes(total)} — too large to zip in the browser.
-          Use Drive to download it.
+          Thư mục có dung lượng {formatBytes(total)}, quá lớn để nén ngay trong
+          trình duyệt. Vui lòng tải trực tiếp từ Google Drive.
         </p>
       )}
     </div>

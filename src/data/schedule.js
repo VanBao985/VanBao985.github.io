@@ -9,31 +9,30 @@
 // highlights, and the only one that shows a time and venue.
 export const SCHEDULE = [
   {
-    day: 'Saturday morning',
+    day: 'Sáng thứ Bảy',
     date: '26.09.2026',
     detail:
-      'Sinh viên tốt nghiệp xếp hạng ' +
-      'xuất sắc được khen thưởng của tất cả các Trường/Khoa.',
+      'Khen thưởng sinh viên tốt nghiệp xếp hạng xuất sắc của tất cả các Trường/Khoa.',
     mine: true,
     time: '10:00 - 11:30',
     venue: 'Nhà C2',
   },
   {
-    day: 'Saturday afternoon',
+    day: 'Chiều thứ Bảy',
     date: '26.09.2026',
     detail:
-      'Khoa Toán tin, Trường Kinh tế và Trường Cơ khí',
+      'Khoa Toán - Tin, Trường Kinh tế và Trường Cơ khí.',
   },
   {
-    day: 'Sunday morning',
+    day: 'Sáng Chủ nhật',
     date: '27.09.2026',
     detail:
-      'Khoa Vật lý kỹ thuật, Trường Vật liệu và Trường CNTT&TT',
+      'Khoa Vật lý kỹ thuật, Trường Vật liệu và Trường CNTT&TT.',
   },
   {
-    day: 'Sunday afternoon',
+    day: 'Chiều Chủ nhật',
     date: '27.09.2026',
     detail:
-      'Khoa KH&CN Giáo dục, Khoa Ngoại ngữ và Trường Điện - Điện tử',
+      'Khoa KH&CN Giáo dục, Khoa Ngoại ngữ và Trường Điện - Điện tử.',
   },
 ];

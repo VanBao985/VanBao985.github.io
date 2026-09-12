@@ -4,10 +4,10 @@ export default function NotFound() {
   return (
     <main className="wrap">
       <div className="state">
-        <h2>404 — Page not found</h2>
+        <h2>404 — Không tìm thấy trang</h2>
         <p>
-          There is nothing at this address. Please return to the gallery at{' '}
-          <Link to="/gallery">/gallery</Link>.
+          Địa chỉ này không tồn tại hoặc đã được thay đổi. Mời bạn quay về{' '}
+          <Link to="/gallery">trang kỷ niệm</Link>.
         </p>
       </div>
     </main>

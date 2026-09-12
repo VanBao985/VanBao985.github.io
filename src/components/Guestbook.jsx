@@ -9,13 +9,12 @@ const formatDate = (iso) => {
   const d = new Date(iso);
   return Number.isNaN(d.getTime())
     ? ''
-    : d.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
+    : d.toLocaleDateString('vi-VN', { day: 'numeric', month: 'short', year: 'numeric' });
 };
 
 export default function Guestbook({
   guestbookKey = 'main',
   ownerName = 'Văn Bảo',
-  ownerNamePlain = 'Van Bao',
 }) {
   const { isAuthed, ready } = useAuth();
 
@@ -58,7 +57,7 @@ export default function Guestbook({
     if (sending) return;
 
     if (tooSoon(guestbookKey)) {
-      setNotice({ kind: 'error', text: 'You just signed — give it a minute before writing again.' });
+      setNotice({ kind: 'error', text: 'Bạn vừa gửi một lời nhắn. Vui lòng đợi một phút trước khi gửi tiếp.' });
       return;
     }
 
@@ -68,7 +67,7 @@ export default function Guestbook({
       await addEntry({ name, message, guestbookKey });
       setName('');
       setMessage('');
-      setNotice({ kind: 'ok', text: 'Thank you — your note has been shown below.' });
+      setNotice({ kind: 'ok', text: 'Cảm ơn bạn! Lời nhắn đã được lưu và hiển thị bên dưới.' });
       await refresh(isAuthed);
     } catch (err) {
       setNotice({ kind: 'error', text: err.message });
@@ -84,14 +83,14 @@ export default function Guestbook({
       await setHidden(entry.id, !entry.hidden, guestbookKey);
       await refresh(true);
     } catch (err) {
-      setNotice({ kind: 'error', text: `Could not update that note: ${err.message}` });
+      setNotice({ kind: 'error', text: `Không thể cập nhật lời nhắn: ${err.message}` });
     } finally {
       setBusyId(null);
     }
   }
 
   async function handleDelete(entry) {
-    if (!window.confirm('Delete this note for good?\n\nHiding it is reversible; deleting is not.')) {
+    if (!window.confirm('Xóa vĩnh viễn lời nhắn này?\n\nBạn có thể hiện lại lời nhắn đã ẩn, nhưng không thể khôi phục lời nhắn đã xóa.')) {
       return;
     }
     setBusyId(entry.id);
@@ -100,7 +99,7 @@ export default function Guestbook({
       await removeEntry(entry.id, guestbookKey);
       await refresh(true);
     } catch (err) {
-      setNotice({ kind: 'error', text: `Could not delete that note: ${err.message}` });
+      setNotice({ kind: 'error', text: `Không thể xóa lời nhắn: ${err.message}` });
     } finally {
       setBusyId(null);
     }
@@ -111,18 +110,19 @@ export default function Guestbook({
   return (
     <section id="guestbook" className="wrap guestbook" aria-labelledby="guestbook-title">
       <div className="guestbook__intro">
-        <p className="hero__eyebrow">Leave a note</p>
-        <h2 id="guestbook-title">Sign the guestbook</h2>
+        <p className="hero__eyebrow">Guestbook · Lưu bút</p>
+        <h2 id="guestbook-title">Gửi lại một lời nhắn</h2>
         <p>
-          Write something to remember this by. Your name is kept private — only
-          the message appears below. <br/>
-          Để lại lời nhắn cho {ownerName}. Tên của bạn sẽ được giữ bí mật, tin nhắn được hiển thị bên dưới.
+          Share a memory, a wish, or simply say hello. Your name stays private;
+          only your message appears below. <br/>
+          Hãy gửi {ownerName} một kỷ niệm, một lời chúc hoặc đơn giản là một lời
+          chào. Tên của bạn được giữ riêng tư; chỉ nội dung lời nhắn được công khai.
         </p>
       </div>
 
       {status === 'off' ? (
         <div className="state">
-          <p>The guestbook is not connected yet.</p>
+          <p>Sổ lưu bút chưa được kết nối. Vui lòng quay lại sau.</p>
         </div>
       ) : (
         <>
@@ -130,7 +130,7 @@ export default function Guestbook({
             {notice && <div className={`alert alert--${notice.kind}`}>{notice.text}</div>}
 
             <div className="field">
-              <label htmlFor="gb-name">Your name</label>
+              <label htmlFor="gb-name">Tên của bạn</label>
               <input
                 className="input"
                 id="gb-name"
@@ -140,11 +140,11 @@ export default function Guestbook({
                 // placeholder=""
                 autoComplete="name"
               />
-              <p className="field__hint">Only {ownerNamePlain} can see this.</p>
+              <p className="field__hint">Chỉ {ownerName} mới có thể thấy tên này.</p>
             </div>
 
             <div className="field">
-              <label htmlFor="gb-message">Your message</label>
+              <label htmlFor="gb-message">Lời nhắn của bạn</label>
               <textarea
                 className="textarea"
                 id="gb-message"
@@ -152,21 +152,21 @@ export default function Guestbook({
                 value={message}
                 maxLength={MAX_MESSAGE}
                 onChange={(e) => setMessage(e.target.value)}
-                placeholder="A memory, a wish, an inside joke…"
+                placeholder="Một kỷ niệm, một lời chúc hay câu chuyện chỉ chúng ta hiểu…"
               />
               <p className="field__hint">
-                {message.length} / {MAX_MESSAGE} · this part is shown publicly
+                {message.length} / {MAX_MESSAGE} · nội dung này sẽ được hiển thị công khai
               </p>
             </div>
 
             <button className="btn btn--accent" type="submit" disabled={!canSubmit}>
-              {sending ? 'Saving…' : 'Add my note'}
+              {sending ? 'Đang gửi…' : 'Gửi lời nhắn'}
             </button>
           </form>
 
           {isAuthed && status === 'ready' && (
             <p className="guestbook__adminhint">
-              Signed in — you can see names and hidden notes. Guests see neither.
+              Chế độ quản trị: bạn có thể xem tên người gửi và các lời nhắn đang ẩn.
             </p>
           )}
 
@@ -174,19 +174,19 @@ export default function Guestbook({
             {status === 'loading' && (
               <div className="state">
                 <div className="spinner" style={{ margin: '0 auto 1rem' }} />
-                <p>Loading notes…</p>
+                <p>Đang tải lời nhắn…</p>
               </div>
             )}
 
             {status === 'error' && (
               <div className="state">
-                <p>Could not load the notes. {loadError}</p>
+                <p>Không thể tải lời nhắn. {loadError}</p>
               </div>
             )}
 
             {status === 'ready' && messages.length === 0 && (
               <div className="state">
-                <p>No notes yet — be the first to write one.</p>
+                <p>Chưa có lời nhắn nào — hãy là người đầu tiên để lại đôi lời.</p>
               </div>
             )}
 
@@ -212,14 +212,14 @@ export default function Guestbook({
                         onClick={() => toggleHidden(entry)}
                         disabled={busyId === entry.id}
                       >
-                        {entry.hidden ? 'Show' : 'Hide'}
+                        {entry.hidden ? 'Hiện' : 'Ẩn'}
                       </button>
                       <button
                         className="btn btn--danger btn--sm"
                         onClick={() => handleDelete(entry)}
                         disabled={busyId === entry.id}
                       >
-                        Delete
+                        Xóa
                       </button>
                     </div>
                   )}

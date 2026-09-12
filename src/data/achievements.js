@@ -9,22 +9,22 @@ export const ACHIEVEMENTS = [
   {
     value: 240,
     decimals: 0,
-    unit: 'M',
-    label: 'Scholarships Awarded',
-    note: 'Học bổng Khuyến khích học tập 5 kỳ, Học bổng Chắp cách Bách khoa 7 kỳ \n và các Học bổng doanh nghiệp khác: Vietcombank,...',
+    unit: ' triệu ₫',
+    label: 'Tổng giá trị học bổng',
+    note: 'Học bổng Khuyến khích học tập trong 5 kỳ, học bổng Chắp cánh Bách khoa trong 7 kỳ và các học bổng doanh nghiệp, trong đó có Vietcombank.',
   },
   {
     value: 3.9,
     decimals: 1,
     unit: '/ 4.0',
     label: 'CPA',
-    note: 'Tốt nghiệp xuất sắc được khen thưởng của Đại học',
+    note: 'Tốt nghiệp loại xuất sắc và được Đại học Bách khoa Hà Nội khen thưởng.',
   },
   {
     value: 2026,
     decimals: 0,
     unit: '',
-    label: 'Best Presentation Award',
-    note: 'Đồ án tốt nghiệp xuất sắc nhất Hội đồng'
+    label: 'Đồ án tốt nghiệp xuất sắc',
+    note: 'Đồ án tốt nghiệp được đánh giá xuất sắc nhất hội đồng.',
   }
 ];
