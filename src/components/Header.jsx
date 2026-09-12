@@ -17,12 +17,12 @@ export default function Header() {
           {isLinhThuGallery ? 'Linh Thư · Tốt nghiệp' : 'Kỷ niệm đại học'}
         </Link>
         <nav className="nav">
-          <NavLink to={galleryPath}>Kỷ niệm</NavLink>
+          <NavLink to={galleryPath}>Memories</NavLink>
           {/* Both send guests to sign-in first; RequireAuth does the real
               gating. A guest's own photo link is personal, so there is nothing
               here for them to browse — only the tool that builds those links. */}
-          {!isLinhThuGallery && <NavLink to="/photo-links">Ảnh riêng</NavLink>}
-          {!isLinhThuGallery && <NavLink to="/invite-maker">Thiệp mời</NavLink>}
+          {!isLinhThuGallery && <NavLink to="/photo-links">Images</NavLink>}
+          {!isLinhThuGallery && <NavLink to="/invite-maker">Invitation Cards</NavLink>}
           {isAuthed && (
             <button
               className="btn btn--ghost btn--sm"

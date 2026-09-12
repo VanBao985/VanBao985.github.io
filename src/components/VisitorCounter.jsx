@@ -69,7 +69,7 @@ export default function VisitorCounter() {
         <circle cx="12" cy="12" r="3" />
       </svg>
       <span className="visitor-count__num">{count.toLocaleString()}</span>
-      lượt xem
+      views
     </span>
   );
 }

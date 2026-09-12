@@ -9,7 +9,7 @@ export default function Hero({ total = 0, folders = [], activeFolder, onFolderCh
         Four years of lecture halls, spontaneous trips, late nights spent
         racing deadlines and lasting friendships — all gathered here in photographs. <br/>
         Bốn năm giảng đường, những chuyến đi bất chợt, những đêm chạy deadline
-        và tình bạn — tất cả được lưu lại qua từng khung hình.
+        và tình bạn đẹp — tất cả được lưu lại qua từng khung hình.
       </p>
 
       {total > 0 && (
