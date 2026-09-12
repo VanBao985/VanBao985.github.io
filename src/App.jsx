@@ -2,6 +2,7 @@ import { Route, Routes } from 'react-router-dom';
 import Layout from './components/Layout.jsx';
 import RequireAuth from './components/RequireAuth.jsx';
 import Gallery from './pages/Gallery.jsx';
+import LinhThuGallery from './pages/LinhThuGallery.jsx';
 import Login from './pages/Login.jsx';
 import InviteMaker from './pages/InviteMaker.jsx';
 import Invite from './pages/Invite.jsx';
@@ -14,6 +15,8 @@ export default function App() {
     <Routes>
       <Route element={<Layout />}>
         <Route path="/gallery" element={<Gallery />} />
+        <Route path="/gallery/linhthu" element={<LinhThuGallery />} />
+        <Route path="/gallery/linhthu/:guestName" element={<LinhThuGallery />} />
         <Route path="/login" element={<Login />} />
 
         {/* Making a card is admin-only… */}

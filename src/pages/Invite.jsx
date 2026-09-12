@@ -37,8 +37,16 @@ export default function Invite() {
   return (
     <main className="wrap invite-page">
       <section className="invite-cta">
-        <h2>Four years, in photographs</h2>
-        <p>Before the ceremony, look back on Văn Bảo&rsquo;s four years.</p>
+        <h2>
+          Four years, in photographs
+          {/* <span className="invite-cta__heading-vi">Bốn năm thanh xuân qua những bức ảnh</span> */}
+        </h2>
+        <p>
+          Before the ceremony, look back on Văn Bảo&rsquo;s four years.
+          <span className="invite-cta__copy-vi">
+            Trước buổi lễ, hãy cùng nhìn lại hành trình bốn năm của Văn Bảo.
+          </span>
+        </p>
 
         <div className="invite-cta__action">
           {/* Decorative only — the link already says where it goes, so a
@@ -51,7 +59,10 @@ export default function Invite() {
           </span>
 
           <Link className="btn btn--accent invite-cta__btn" to="/gallery">
-            Explore the gallery and leave a note
+            <span>Explore the gallery and leave a note</span>
+            <span className="invite-cta__btn-vi">
+              Khám phá Hành trình 4 năm và để lại lời nhắn
+            </span>
           </Link>
 
           <span className="invite-cta__arrow invite-cta__arrow--flip" aria-hidden="true">

@@ -12,7 +12,11 @@ const formatDate = (iso) => {
     : d.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
 };
 
-export default function Guestbook() {
+export default function Guestbook({
+  guestbookKey = 'main',
+  ownerName = 'Văn Bảo',
+  ownerNamePlain = 'Van Bao',
+}) {
   const { isAuthed, ready } = useAuth();
 
   const [messages, setMessages] = useState([]);
@@ -27,7 +31,7 @@ export default function Guestbook() {
 
   const refresh = useCallback(async (asAdmin) => {
     try {
-      setMessages(await listMessages({ asAdmin }));
+      setMessages(await listMessages({ asAdmin, guestbookKey }));
       setStatus('ready');
     } catch (err) {
       if (err.message === 'not-configured') {
@@ -37,7 +41,7 @@ export default function Guestbook() {
       setLoadError(err.message);
       setStatus('error');
     }
-  }, []);
+  }, [guestbookKey]);
 
   // Re-read when the session settles or changes: an admin sees more rows.
   useEffect(() => {
@@ -53,7 +57,7 @@ export default function Guestbook() {
     e.preventDefault();
     if (sending) return;
 
-    if (tooSoon()) {
+    if (tooSoon(guestbookKey)) {
       setNotice({ kind: 'error', text: 'You just signed — give it a minute before writing again.' });
       return;
     }
@@ -61,7 +65,7 @@ export default function Guestbook() {
     setSending(true);
     setNotice(null);
     try {
-      await addEntry({ name, message });
+      await addEntry({ name, message, guestbookKey });
       setName('');
       setMessage('');
       setNotice({ kind: 'ok', text: 'Thank you — your note has been shown below.' });
@@ -77,7 +81,7 @@ export default function Guestbook() {
     setBusyId(entry.id);
     setNotice(null);
     try {
-      await setHidden(entry.id, !entry.hidden);
+      await setHidden(entry.id, !entry.hidden, guestbookKey);
       await refresh(true);
     } catch (err) {
       setNotice({ kind: 'error', text: `Could not update that note: ${err.message}` });
@@ -93,7 +97,7 @@ export default function Guestbook() {
     setBusyId(entry.id);
     setNotice(null);
     try {
-      await removeEntry(entry.id);
+      await removeEntry(entry.id, guestbookKey);
       await refresh(true);
     } catch (err) {
       setNotice({ kind: 'error', text: `Could not delete that note: ${err.message}` });
@@ -112,7 +116,7 @@ export default function Guestbook() {
         <p>
           Write something to remember this by. Your name is kept private — only
           the message appears below. <br/>
-          Để lại lời nhắn cho Văn Bảo. Tên của bạn sẽ được giữ bí mật, tin nhắn được hiển thị bên dưới.
+          Để lại lời nhắn cho {ownerName}. Tên của bạn sẽ được giữ bí mật, tin nhắn được hiển thị bên dưới.
         </p>
       </div>
 
@@ -136,7 +140,7 @@ export default function Guestbook() {
                 // placeholder=""
                 autoComplete="name"
               />
-              <p className="field__hint">Only Van Bao can see this.</p>
+              <p className="field__hint">Only {ownerNamePlain} can see this.</p>
             </div>
 
             <div className="field">

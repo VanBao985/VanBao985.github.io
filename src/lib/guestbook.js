@@ -1,4 +1,4 @@
-import { SUPABASE, isConfigured } from '../data/supabase.js';
+import { getGuestbookConfig, isConfigured } from '../data/supabase.js';
 import { supabase } from './auth.js';
 
 /**
@@ -29,12 +29,13 @@ const client = () => {
  * Read notes. Signed in, this returns names and hidden notes so they can be
  * moderated; signed out, it returns visible messages only.
  */
-export async function listMessages({ asAdmin = false } = {}) {
+export async function listMessages({ asAdmin = false, guestbookKey = 'main' } = {}) {
   const db = client();
+  const config = getGuestbookConfig(guestbookKey);
 
   const query = asAdmin
-    ? db.from(SUPABASE.table).select('id,name,message,hidden,created_at')
-    : db.from(SUPABASE.publicView).select('id,message,created_at');
+    ? db.from(config.table).select('id,name,message,hidden,created_at')
+    : db.from(config.publicView).select('id,message,created_at');
 
   const { data, error } = await query.order('created_at', { ascending: false }).limit(200);
   if (error) throw new Error(error.message);
@@ -42,14 +43,16 @@ export async function listMessages({ asAdmin = false } = {}) {
 }
 
 /** Hide or restore a note. Only an authenticated session may do this. */
-export async function setHidden(id, hidden) {
-  const { error } = await client().from(SUPABASE.table).update({ hidden }).eq('id', id);
+export async function setHidden(id, hidden, guestbookKey = 'main') {
+  const { table } = getGuestbookConfig(guestbookKey);
+  const { error } = await client().from(table).update({ hidden }).eq('id', id);
   if (error) throw new Error(error.message);
 }
 
 /** Delete a note for good. Kept separate from hiding, which is reversible. */
-export async function removeEntry(id) {
-  const { error } = await client().from(SUPABASE.table).delete().eq('id', id);
+export async function removeEntry(id, guestbookKey = 'main') {
+  const { table } = getGuestbookConfig(guestbookKey);
+  const { error } = await client().from(table).delete().eq('id', id);
   if (error) throw new Error(error.message);
 }
 
@@ -58,24 +61,24 @@ export async function removeEntry(id) {
  * and one person filling the page. It is trivially bypassed, so the real
  * limits are the length checks in the database policy.
  */
-export function tooSoon() {
+export function tooSoon(guestbookKey = 'main') {
   try {
-    return Date.now() - Number(localStorage.getItem(RATE_KEY) || 0) < RATE_LIMIT_MS;
+    return Date.now() - Number(localStorage.getItem(`${RATE_KEY}:${guestbookKey}`) || 0) < RATE_LIMIT_MS;
   } catch {
     return false;
   }
 }
 
-function markSigned() {
+function markSigned(guestbookKey) {
   try {
-    localStorage.setItem(RATE_KEY, String(Date.now()));
+    localStorage.setItem(`${RATE_KEY}:${guestbookKey}`, String(Date.now()));
   } catch {
     /* private mode — skip the cooldown rather than block the guest */
   }
 }
 
 /** Add an entry. Returns nothing: guests cannot read the table back. */
-export async function addEntry({ name, message }) {
+export async function addEntry({ name, message, guestbookKey = 'main' }) {
   const payload = {
     name: String(name).trim().slice(0, MAX_NAME),
     message: String(message).trim().slice(0, MAX_MESSAGE),
@@ -85,8 +88,9 @@ export async function addEntry({ name, message }) {
     throw new Error('Please fill in both your name and your message.');
   }
 
-  const { error } = await client().from(SUPABASE.table).insert(payload);
+  const { table } = getGuestbookConfig(guestbookKey);
+  const { error } = await client().from(table).insert(payload);
   if (error) throw new Error(error.message);
 
-  markSigned();
+  markSigned(guestbookKey);
 }

@@ -18,7 +18,7 @@ export const ACHIEVEMENTS = [
     decimals: 1,
     unit: '/ 4.0',
     label: 'CPA',
-    note: 'Tốt nghiệp xuất sắc',
+    note: 'Tốt nghiệp xuất sắc được khen thưởng của Đại học',
   },
   {
     value: 2026,

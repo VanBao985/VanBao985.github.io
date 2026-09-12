@@ -13,30 +13,27 @@ export const SCHEDULE = [
     date: '26.09.2026',
     detail:
       'Sinh viên tốt nghiệp xếp hạng ' +
-      'xuất sắc của tất cả các Trường/Khoa.',
+      'xuất sắc được khen thưởng của tất cả các Trường/Khoa.',
     mine: true,
-    time: '10:00 – 11:30',
+    time: '10:00 - 11:30',
     venue: 'Nhà C2',
   },
   {
     day: 'Saturday afternoon',
     date: '26.09.2026',
     detail:
-      'Trường Công nghệ Thông tin và Truyền thông, ' +
-      'Trường Hóa và Khoa học sự sống, Khoa KH&CN Giáo dục.',
+      'Khoa Toán tin, Trường Kinh tế và Trường Cơ khí',
   },
   {
     day: 'Sunday morning',
     date: '27.09.2026',
     detail:
-      'Trường Cơ khí, Trường Vật liệu, Khoa Ngoại ngữ, ' +
-      'Khoa Vật lý Kỹ thuật và Kỹ sư chuyên sâu Trường Vật liệu và Cơ khí.',
+      'Khoa Vật lý kỹ thuật, Trường Vật liệu và Trường CNTT&TT',
   },
   {
     day: 'Sunday afternoon',
     date: '27.09.2026',
     detail:
-      'Trường Điện - Điện tử, Trường Kinh tế, ' +
-      'Khoa Toán - Tin và Kỹ sư chuyên sâu Trường Điện - Điện tử.',
+      'Khoa KH&CN Giáo dục, Khoa Ngoại ngữ và Trường Điện - Điện tử',
   },
 ];

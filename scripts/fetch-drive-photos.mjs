@@ -14,14 +14,25 @@
  */
 
 import { writeFile, mkdir } from 'node:fs/promises';
-import { dirname, resolve } from 'node:path';
+import { dirname, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { DRIVE_FOLDERS } from '../src/data/drive-folders.js';
+import { LINHTHU_DRIVE_FOLDERS } from '../src/data/drive-folders-linhthu.js';
 
-const OUT_FILE = resolve(
-  dirname(fileURLToPath(import.meta.url)),
-  '../public/data/drive-photos.json'
-);
+const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url));
+
+const COLLECTIONS = [
+  {
+    label: 'Main gallery',
+    folders: DRIVE_FOLDERS,
+    outFile: resolve(SCRIPT_DIR, '../public/data/drive-photos.json'),
+  },
+  {
+    label: 'Linh Thu gallery',
+    folders: LINHTHU_DRIVE_FOLDERS,
+    outFile: resolve(SCRIPT_DIR, '../public/data/drive-photos-linhthu.json'),
+  },
+];
 
 const IMAGE_EXT = /\.(jpe?g|png|gif|webp|avif)$/i;
 
@@ -82,32 +93,38 @@ async function fetchFolder({ id, name }) {
   return { id, name, photos };
 }
 
-async function main() {
-  if (!DRIVE_FOLDERS.length) {
-    throw new Error('No folders configured in src/data/drive-folders.js');
+async function syncCollection({ label, folders, outFile }) {
+  if (!folders.length) {
+    throw new Error(`No folders configured for ${label}`);
   }
 
-  process.stdout.write(`Syncing ${DRIVE_FOLDERS.length} Drive folder(s)…\n`);
+  process.stdout.write(`${label}: syncing ${folders.length} Drive folder(s)…\n`);
 
   // Sequential on purpose: a handful of folders is not worth hammering
   // Google in parallel, and failures stay readable in the build log.
-  const folders = [];
-  for (const folder of DRIVE_FOLDERS) {
-    folders.push(await fetchFolder(folder));
+  const syncedFolders = [];
+  for (const folder of folders) {
+    syncedFolders.push(await fetchFolder(folder));
   }
 
-  const total = folders.reduce((sum, f) => sum + f.photos.length, 0);
+  const total = syncedFolders.reduce((sum, folder) => sum + folder.photos.length, 0);
 
-  await mkdir(dirname(OUT_FILE), { recursive: true });
+  await mkdir(dirname(outFile), { recursive: true });
   await writeFile(
     // Write date in vietnamese time zone
     // new Date().toLocaleString('vi-VN'),
-    OUT_FILE,
-    `${JSON.stringify({ syncedAt: new Date().toLocaleString('vi-VN'), folders }, null, 2)}\n`,
+    outFile,
+    `${JSON.stringify({ syncedAt: new Date().toLocaleString('vi-VN'), folders: syncedFolders }, null, 2)}\n`,
     'utf8'
   );
 
-  process.stdout.write(`${total} photos total written to public/data/drive-photos.json\n`);
+  process.stdout.write(`  ${total} photos written to ${relative(resolve(SCRIPT_DIR, '..'), outFile)}\n`);
+}
+
+async function main() {
+  for (const collection of COLLECTIONS) {
+    await syncCollection(collection);
+  }
 }
 
 main().catch((err) => {

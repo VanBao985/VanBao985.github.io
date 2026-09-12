@@ -11,3 +11,11 @@ export const SECTIONS = [
   { id: 'schedule', label: 'Schedule' },
   { id: 'venue', label: 'Map' },
 ];
+
+export const LINHTHU_SECTIONS = [
+  { id: 'invite', label: 'Invite' },
+  { id: 'photos', label: 'Photos' },
+  { id: 'guestbook', label: 'Guestbook' },
+  { id: 'schedule', label: 'Schedule' },
+  { id: 'venue', label: 'Map' },
+];

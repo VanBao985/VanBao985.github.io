@@ -1,29 +1,32 @@
-import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import ThemeToggle from './ThemeToggle.jsx';
 import { useAuth } from '../context/AuthContext.jsx';
 
 export default function Header() {
   const { isAuthed, signOut } = useAuth();
   const navigate = useNavigate();
+  const { pathname } = useLocation();
+  const isLinhThuGallery = pathname.startsWith('/gallery/linhthu');
+  const galleryPath = isLinhThuGallery ? '/gallery/linhthu' : '/gallery';
 
   return (
     <header className="site-header">
       <div className="wrap site-header__inner">
-        <Link className="brand" to="/gallery">
+        <Link className="brand" to={galleryPath}>
           <span className="brand__dot" />
-          College Memories
+          {isLinhThuGallery ? 'Linh Thư · Graduation' : 'College Memories'}
         </Link>
         <nav className="nav">
-          <NavLink to="/gallery">Gallery</NavLink>
+          <NavLink to={galleryPath}>Gallery</NavLink>
           {/* Both send guests to sign-in first; RequireAuth does the real
               gating. A guest's own photo link is personal, so there is nothing
               here for them to browse — only the tool that builds those links. */}
-          <NavLink to="/photo-links">Photos</NavLink>
-          <NavLink to="/invite-maker">Invites</NavLink>
+          {!isLinhThuGallery && <NavLink to="/photo-links">Photos</NavLink>}
+          {!isLinhThuGallery && <NavLink to="/invite-maker">Invites</NavLink>}
           {isAuthed && (
             <button
               className="btn btn--ghost btn--sm"
-              onClick={async () => { await signOut(); navigate('/gallery'); }}
+              onClick={async () => { await signOut(); navigate(galleryPath); }}
             >
               Sign out
             </button>

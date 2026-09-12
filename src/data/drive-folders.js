@@ -11,5 +11,4 @@
 export const DRIVE_FOLDERS = [
   { id: '1aj-6LSK9prM82FyeG1706QWqE8-hLvEU', name: 'Graduation Day 2026' },
   { id: '14UDkaVb4XAMJa-guy2Jw5LbE2Qi3p8Bf', name: 'CLB HTHT 2024' }
-  // { id: '1j8ZQOvVjBaNyztyMk2X20-65KElWEjRM', name: 'Linh Thư' }
 ];

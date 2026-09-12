@@ -8,16 +8,16 @@ import { SCHEDULE } from '../data/schedule.js';
  * when to turn up can scroll for it. Edit src/data/schedule.js — no changes
  * here are needed to add, remove or re-mark a session.
  */
-export default function Schedule() {
+export default function Schedule({ ownerName = 'Văn Bảo' }) {
   return (
     <section id="schedule" className="schedule">
       <div className="wrap">
-        <p className="hero__eyebrow">Graduation weekend</p>
+        <p className="hero__eyebrow">Graduation Week</p>
         <h2 className="schedule__title">Four ceremonies across two days</h2>
         <p className="schedule__intro">
           The university hands out degrees in four sessions. Mine is the first
           one, on Saturday morning. <br/>
-          Lễ tốt nghiệp diễn ra trong 4 buổi. Buổi của mình là sáng thứ bảy 26.09.2026.
+          Lễ tốt nghiệp diễn ra trong 4 buổi. Buổi của {ownerName} là sáng thứ bảy 26.09.2026.
         </p>
 
         <ol className="schedule__list">

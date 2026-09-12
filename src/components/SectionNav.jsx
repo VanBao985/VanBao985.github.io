@@ -14,12 +14,12 @@ import { SECTIONS } from '../data/sections.js';
  * two margins, so CSS hides it below that instead of letting it sit on top of
  * the photos.
  */
-export default function SectionNav() {
-  const [active, setActive] = useState(SECTIONS[0].id);
+export default function SectionNav({ sections = SECTIONS }) {
+  const [active, setActive] = useState(sections[0].id);
   const onScreen = useRef(new Set());
 
   useEffect(() => {
-    const els = SECTIONS
+    const els = sections
       .map(({ id }) => document.getElementById(id))
       .filter(Boolean);
     if (!els.length) return undefined;
@@ -34,7 +34,7 @@ export default function SectionNav() {
         // Sections overlap this band while scrolling, so take the first one in
         // page order rather than whichever entry fired last — otherwise the
         // highlight jumps backwards on the way down.
-        const first = SECTIONS.find((s) => onScreen.current.has(s.id));
+        const first = sections.find((s) => onScreen.current.has(s.id));
         if (first) setActive(first.id);
       },
       // A thin band across the middle of the viewport: a section counts as
@@ -45,7 +45,7 @@ export default function SectionNav() {
 
     els.forEach((el) => io.observe(el));
     return () => io.disconnect();
-  }, []);
+  }, [sections]);
 
   function goTo(event, id) {
     // Leave modified clicks alone — those mean "open in a new tab", not "jump".
@@ -67,7 +67,7 @@ export default function SectionNav() {
   return (
     <nav className="section-nav" aria-label="Page sections">
       <ul>
-        {SECTIONS.map((section) => (
+        {sections.map((section) => (
           <li key={section.id}>
             <a
               href={`#${section.id}`}
