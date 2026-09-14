@@ -70,6 +70,27 @@
    Base
  * ------------------------------------------------------------------ */
 
+/* Keep Linh Thu's invitation and gallery on a light-blue canvas, with
+   readable text even when another page has saved the dark theme. */
+.site-layout--linhthu {
+  color-scheme: light;
+  --paper: #edf6fc;
+  --paper-raised: #ffffff;
+  --paper-sunken: #e2f0fa;
+  --ink: #263645;
+  --ink-soft: #566c7d;
+  --ink-faint: #718596;
+  --line: #cbdfea;
+  --accent: #c2703d;
+  --accent-soft: #f0dcce;
+  --accent-ink: #8f4e26;
+  --shadow: 0 1px 2px rgba(38, 54, 69, .05), 0 8px 24px rgba(38, 54, 69, .07);
+  --shadow-lift: 0 4px 10px rgba(38, 54, 69, .09), 0 20px 44px rgba(38, 54, 69, .13);
+  min-height: 100vh;
+  color: var(--ink);
+  background: var(--paper);
+}
+
 *, *::before, *::after { box-sizing: border-box; }
 
 html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
