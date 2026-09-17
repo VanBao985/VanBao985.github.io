@@ -7,10 +7,10 @@
 //   note:     optional extra line of context
 export const ACHIEVEMENTS = [
   {
-    value: 240,
+    value: 14,
     decimals: 0,
-    unit: ' triệu ₫',
-    label: 'Tổng giá trị học bổng',
+    unit: ' lần',
+    label: 'Tổng số lần nhận học bổng',
     note: 'Học bổng Khuyến khích học tập trong 5 kỳ, học bổng Chắp cánh Bách khoa trong 7 kỳ và các học bổng doanh nghiệp: Vietcombank,...',
   },
   {
