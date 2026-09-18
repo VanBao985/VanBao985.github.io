@@ -8,7 +8,7 @@ export default function Footer() {
   return (
     <footer className="site-footer">
       <div className="wrap site-footer__inner">
-        <span>© {new Date().getFullYear()} {owner} — Lưu giữ thanh xuân qua từng khung hình</span>
+        <span>© {new Date().getFullYear()} {owner} — Preserving youth, one frame at a time</span>
         <VisitorCounter />
       </div>
     </footer>

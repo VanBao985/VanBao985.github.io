@@ -14,7 +14,7 @@ export default function Header() {
       <div className="wrap site-header__inner">
         <Link className="brand" to={galleryPath}>
           <span className="brand__dot" />
-          {isLinhThuGallery ? 'Linh Thư · Tốt nghiệp' : 'Kỷ niệm đại học'}
+          {isLinhThuGallery ? 'Linh Thư · Graduation' : 'University Memories'}
         </Link>
         <nav className="nav">
           <NavLink to={galleryPath}>Memories</NavLink>
@@ -28,7 +28,7 @@ export default function Header() {
               className="btn btn--ghost btn--sm"
               onClick={async () => { await signOut(); navigate(galleryPath); }}
             >
-              Đăng xuất
+              Sign out
             </button>
           )}
           <ThemeToggle />

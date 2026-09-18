@@ -3,8 +3,8 @@ import { ACHIEVEMENTS } from '../data/achievements.js';
 
 export default function Achievements() {
   return (
-    <section id="highlights" className="wrap achievements" aria-label="Thành tích nổi bật">
-      <p className="achievements__eyebrow">Highlights · Dấu ấn</p>
+    <section id="highlights" className="wrap achievements" aria-label="Highlights">
+      <p className="achievements__eyebrow">Highlights</p>
       <div className="achievements__grid">
         {ACHIEVEMENTS.map((a, i) => (
           <article

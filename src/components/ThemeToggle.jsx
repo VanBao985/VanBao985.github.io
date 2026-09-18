@@ -32,7 +32,7 @@ export default function ThemeToggle() {
   }, []);
 
   const next = theme === 'dark' ? 'light' : 'dark';
-  const nextLabel = next === 'light' ? 'sáng' : 'tối';
+  const nextLabel = next === 'light' ? 'light mode' : 'dark mode';
 
   function toggle() {
     setTheme(next);
@@ -49,8 +49,8 @@ export default function ThemeToggle() {
     <button
       className="theme-toggle"
       onClick={toggle}
-      aria-label={`Chuyển sang giao diện ${nextLabel}`}
-      title={`Chuyển sang giao diện ${nextLabel}`}
+      aria-label={`Switch to ${nextLabel}`}
+      title={`Switch to ${nextLabel}`}
     >
       {theme === 'dark' ? (
         // Sun — click to go light
