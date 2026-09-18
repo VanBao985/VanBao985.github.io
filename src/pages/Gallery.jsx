@@ -12,8 +12,8 @@ export default function Gallery() {
       <Achievements />
       <GalleryPhotos />
       <Guestbook />
-      <Schedule />
       <Venue />
+      <Schedule />
     </main>
   );
 }

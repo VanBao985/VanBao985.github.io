@@ -8,14 +8,14 @@ export const SECTIONS = [
   { id: 'highlights', label: 'Dấu ấn' },
   { id: 'photos', label: 'Ảnh' },
   { id: 'guestbook', label: 'Lưu bút' },
-  { id: 'schedule', label: 'Lịch' },
   { id: 'venue', label: 'Bản đồ' },
+  { id: 'schedule', label: 'Lịch' },
 ];
 
 export const LINHTHU_SECTIONS = [
   { id: 'invite', label: 'Thiệp mời' },
   { id: 'photos', label: 'Ảnh' },
   { id: 'guestbook', label: 'Lưu bút' },
-  { id: 'schedule', label: 'Lịch' },
   { id: 'venue', label: 'Bản đồ' },
+  { id: 'schedule', label: 'Lịch' },
 ];

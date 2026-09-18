@@ -30,8 +30,8 @@ export default function LinhThuGallery() {
         guestbookKey="linhthu"
         ownerName="Linh Thư"
       />
-      <Schedule ownerName="Linh Thư" />
       <Venue />
+      <Schedule ownerName="Linh Thư" />
     </main>
   );
 }
